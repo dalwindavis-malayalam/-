@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Class 9 കുറിപ്പുകൾ — അക്ഷരം</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
+
+  :root{
+    --font-body: 'Noto Sans Malayalam', 'Manjari', 'Meera', system-ui, sans-serif;
+    --font-serif: 'Instrument Serif', 'Manjari', serif;
+  }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; background:#000; }
+  body{ background:#000; font-family: var(--font-body); color:#fff; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+  .serif{ font-family: var(--font-serif); font-style:italic; }
+  .container{ max-width:1100px; margin:0 auto; padding:0 24px; }
+
+  .glass{
+    background: rgba(255,255,255,0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border:none;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+    position:relative;
+    overflow:hidden;
+  }
+  .glass::before{
+    content:'';
+    position:absolute; inset:0; border-radius:inherit; padding:1.4px;
+    background:linear-gradient(180deg,
+      rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%,
+      rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+      rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events:none;
+  }
+  .pill{ border-radius:999px; }
+
+  button:focus-visible, a:focus-visible{ outline:2px solid rgba(255,255,255,0.6); outline-offset:2px; }
+
+  .reveal{ opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){ .reveal{ transition:none; opacity:1; transform:none; } }
+
+  /* glow background */
+  .bg-glow{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,120,80,0.10) 0%, transparent 40%),
+      radial-gradient(circle at 85% 25%, rgba(90,160,255,0.10) 0%, transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(150,255,180,0.07) 0%, transparent 45%);
+  }
+
+  /* nav */
+  .nav-wrap{ position:relative; z-index:20; padding:24px; }
+  .nav{ max-width:960px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-radius:999px; }
+  .nav-left{ display:flex; align-items:center; gap:8px; }
+  .brand{ font-size:1.1rem; font-weight:600; margin-left:8px; }
+  .back-link{ font-size:0.85rem; color:rgba(255,255,255,0.7); display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .back-link:hover{ color:#fff; }
+
+  /* header */
+  .page-header{ position:relative; z-index:1; padding:40px 24px 20px; text-align:center; }
+  .eyebrow{ color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:12px; }
+  .page-title{ font-family: var(--font-serif); font-style:italic; font-size:clamp(2.6rem,9vw,4.5rem); letter-spacing:-0.02em; margin-bottom:16px; }
+  .page-sub{ color:rgba(255,255,255,0.55); font-size:0.95rem; max-width:480px; margin:0 auto; line-height:1.6; }
+
+  /* notes grid */
+  .notes-section{ position:relative; z-index:1; padding:40px 24px 100px; }
+  .notes-grid{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:20px; }
+  @media (min-width:640px){ .notes-grid{ grid-template-columns:1fr 1fr; } }
+  @media (min-width:960px){ .notes-grid{ grid-template-columns:1fr 1fr 1fr; } }
+
+  .note-card{
+    border-radius:24px; padding:24px; display:flex; flex-direction:column; gap:16px;
+    transition:transform .25s ease;
+  }
+  .note-card:hover{ transform:translateY(-4px); }
+  .note-icon{
+    width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem;
+  }
+  .note-subject{ font-size:1.15rem; font-weight:600; }
+  .note-desc{ color:rgba(255,255,255,0.5); font-size:0.85rem; line-height:1.5; flex:1; }
+  .note-download{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:12px 20px; border-radius:999px; font-size:0.85rem; font-weight:500;
+    background:rgba(255,255,255,0.08); transition:background .2s, transform .15s;
+  }
+  .note-download:hover{ background:rgba(255,255,255,0.16); }
+  .note-download:active{ transform:scale(0.96); }
+
+  .site-footer{ position:relative; z-index:1; text-align:center; color:rgba(255,255,255,0.3); font-size:0.75rem; padding:0 24px 40px; }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="nav-wrap">
+  <nav class="nav glass pill">
+    <div class="nav-left">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
+      <span class="brand serif">അക്ഷരം</span>
+    </div>
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      ഹോമിലേക്ക്
+    </a>
+  </nav>
+</div>
+
+<header class="page-header">
+  <p class="eyebrow reveal">കുറിപ്പുകൾ</p>
+  <h1 class="page-title reveal" style="transition-delay:.1s">Class 9</h1>
+  <p class="page-sub reveal" style="transition-delay:.2s">ഓരോ വിഷയത്തിന്റെയും കുറിപ്പുകൾ PDF ആയി ഇവിടെ നിന്ന് ഡൗൺലോഡ് ചെയ്യാം.</p>
+</header>
+
+<section class="notes-section">
+  <div class="notes-grid">
+
+    <div class="note-card glass reveal">
+      <div class="note-icon" style="background:rgba(255,140,90,0.18); color:#ff9d70;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="note-subject">മലയാളം</div>
+      <div class="note-desc">Class 9 മലയാളം പാഠപുസ്തകത്തിന്റെ കുറിപ്പുകൾ.</div>
+      <a class="note-download glass pill" href="notes/class9/malayalam.pdf" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        ഡൗൺലോഡ്
+      </a>
+    </div>
+
+    <div class="note-card glass reveal" style="transition-delay:.08s">
+      <div class="note-icon" style="background:rgba(90,170,255,0.18); color:#7db8ff;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="note-subject">ഇംഗ്ലീഷ്</div>
+      <div class="note-desc">Class 9 English പാഠഭാഗങ്ങളുടെ കുറിപ്പുകൾ.</div>
+      <a class="note-download glass pill" href="notes/class9/english.pdf" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        ഡൗൺലോഡ്
+      </a>
+    </div>
+
+    <div class="note-card glass reveal" style="transition-delay:.16s">
+      <div class="note-icon" style="background:rgba(150,255,180,0.18); color:#8dffa8;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="note-subject">കണക്ക്</div>
+      <div class="note-desc">Class 9 ഗണിതശാസ്ത്ര അധ്യായങ്ങളുടെ കുറിപ്പുകൾ.</div>
+      <a class="note-download glass pill" href="notes/class9/maths.pdf" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        ഡൗൺലോഡ്
+      </a>
+    </div>
+
+    <div class="note-card glass reveal" style="transition-delay:.24s">
+      <div class="note-icon" style="background:rgba(255,220,100,0.18); color:#ffd966;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="note-subject">ശാസ്ത്രം</div>
+      <div class="note-desc">Class 9 ഫിസിക്സ്, കെമിസ്ട്രി, ബയോളജി കുറിപ്പുകൾ.</div>
+      <a class="note-download glass pill" href="notes/class9/science.pdf" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        ഡൗൺലോഡ്
+      </a>
+    </div>
+
+    <div class="note-card glass reveal" style="transition-delay:.32s">
+      <div class="note-icon" style="background:rgba(200,150,255,0.18); color:#c99bff;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="note-subject">സാമൂഹ്യശാസ്ത്രം</div>
+      <div class="note-desc">Class 9 ചരിത്രം, ഭൂമിശാസ്ത്രം, പൗരശാസ്ത്രം കുറിപ്പുകൾ.</div>
+      <a class="note-download glass pill" href="notes/class9/social-science.pdf" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        ഡൗൺലോഡ്
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">© 2026 അക്ഷരം. കൂടുതൽ കുറിപ്പുകൾ ഉടൻ ചേർക്കും.</footer>
+
+<script>
+  var revealEls = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '-40px' });
+  revealEls.forEach(function(el){ io.observe(el); });
+</script>
+</body>
+</html>
