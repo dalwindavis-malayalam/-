@@ -125,7 +125,7 @@
 
   function renderCards(container, files){
     if (!files.length){
-      container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല.</div>';
       return;
     }
     container.innerHTML = '';
@@ -164,7 +164,7 @@
         renderCards(container, files);
       })
       .catch(function(){
-        container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+        container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല.</div>';
       });
   }
 
@@ -181,3 +181,4 @@
 </script>
 </body>
 </html>
+
