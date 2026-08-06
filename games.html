@@ -129,7 +129,7 @@
 
   function renderCards(container, files, cls){
     if (!files.length){
-      container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ ഗെയിംസ് ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ ഗെയിംസ് ചേർത്തിട്ടില്ല.</div>';
       return;
     }
     container.innerHTML = '';
@@ -171,7 +171,7 @@
         renderCards(container, files, cls);
       })
       .catch(function(){
-        container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ ഗെയിംസ് ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+        container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ ഗെയിംസ് ചേർത്തിട്ടില്ല.</div>';
       });
   }
 
