@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>തുടക്കക്കാർക്ക് — അക്ഷരം</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
+  :root{ --font-body:'Noto Sans Malayalam','Manjari','Meera',system-ui,sans-serif; --font-serif:'Instrument Serif','Manjari',serif; }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; background:#000; }
+  body{ background:#000; font-family: var(--font-body); color:#fff; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; }
+  .serif{ font-family: var(--font-serif); font-style:italic; }
+  .container{ max-width:1100px; margin:0 auto; padding:0 24px; }
+
+  .glass{ background: rgba(255,255,255,0.01); background-blend-mode: luminosity; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border:none; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1); position:relative; overflow:hidden; }
+  .glass::before{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1.4px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; }
+  .pill{ border-radius:999px; }
+  button:focus-visible, a:focus-visible{ outline:2px solid rgba(255,255,255,0.6); outline-offset:2px; }
+
+  .reveal{ opacity:0; transform:translateY(30px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){ .reveal{ transition:none; opacity:1; transform:none; } }
+
+  .bg-glow{ position:fixed; inset:0; z-index:0; pointer-events:none;
+    background: radial-gradient(circle at 20% 15%, rgba(255,210,100,0.10) 0%, transparent 40%), radial-gradient(circle at 80% 20%, rgba(150,255,180,0.10) 0%, transparent 40%), radial-gradient(circle at 50% 90%, rgba(120,200,255,0.08) 0%, transparent 45%); }
+
+  .nav-wrap{ position:relative; z-index:20; padding:24px; }
+  .nav{ max-width:960px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-radius:999px; }
+  .nav-left{ display:flex; align-items:center; gap:8px; }
+  .brand{ font-size:1.1rem; font-weight:600; margin-left:8px; }
+  .back-link{ font-size:0.85rem; color:rgba(255,255,255,0.7); display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .back-link:hover{ color:#fff; }
+
+  .page-header{ position:relative; z-index:1; padding:40px 24px 10px; text-align:center; }
+  .eyebrow{ color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:12px; }
+  .page-title{ font-family: var(--font-serif); font-style:italic; font-size:clamp(2.4rem,8vw,4rem); letter-spacing:-0.02em; margin-bottom:16px; }
+  .page-sub{ color:rgba(255,255,255,0.55); font-size:0.95rem; max-width:480px; margin:0 auto; line-height:1.6; }
+
+  .tabs{ position:relative; z-index:1; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; padding:32px 24px 8px; }
+  .tab-btn{ padding:12px 32px; border-radius:999px; font-size:1rem; font-weight:600; background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6); transition:all .2s; border:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; gap:8px; }
+  .tab-btn.active{ background:#fff; color:#000; }
+
+  .content-section{ position:relative; z-index:1; padding:24px 24px 100px; }
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+  .items-grid{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:20px; }
+  @media (min-width:640px){ .items-grid{ grid-template-columns:1fr 1fr; } }
+  @media (min-width:960px){ .items-grid{ grid-template-columns:1fr 1fr 1fr; } }
+
+  .item-card{ border-radius:24px; padding:24px; display:flex; flex-direction:column; gap:16px; transition:transform .25s ease; }
+  .item-card:hover{ transform:translateY(-4px); }
+  .item-icon{ width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; background:rgba(255,210,100,0.18); color:#ffd966; }
+  .item-title{ font-size:1.05rem; font-weight:600; word-break:break-word; }
+  .item-desc{ color:rgba(255,255,255,0.5); font-size:0.8rem; line-height:1.5; flex:1; }
+  .item-action{ display:flex; align-items:center; justify-content:center; gap:8px; padding:12px 20px; border-radius:999px; font-size:0.85rem; font-weight:500; background:rgba(255,255,255,0.08); transition:background .2s, transform .15s; }
+  .item-action:hover{ background:rgba(255,255,255,0.16); }
+  .item-action:active{ transform:scale(0.96); }
+
+  .empty-state{ text-align:center; color:rgba(255,255,255,0.4); font-size:0.9rem; padding:48px 24px; max-width:420px; margin:0 auto; line-height:1.7; }
+  .empty-state a{ color:#fff; text-decoration:underline; }
+  .loading{ text-align:center; color:rgba(255,255,255,0.35); font-size:0.85rem; padding:40px 0; }
+
+  .site-footer{ position:relative; z-index:1; text-align:center; color:rgba(255,255,255,0.3); font-size:0.75rem; padding:0 24px 40px; }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="nav-wrap">
+  <nav class="nav glass pill">
+    <div class="nav-left">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
+      <span class="brand serif">അക്ഷരം</span>
+    </div>
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      ഹോമിലേക്ക്
+    </a>
+  </nav>
+</div>
+
+<header class="page-header">
+  <p class="eyebrow reveal">തുടക്കക്കാർക്ക്</p>
+  <h1 class="page-title reveal" style="transition-delay:.1s">മലയാളം ആദ്യമായി പഠിക്കുന്നവർക്ക്</h1>
+  <p class="page-sub reveal" style="transition-delay:.2s">ക്ലാസ് ഒന്നും ഇല്ലാതെ, മലയാളം അക്ഷരമാല മുതൽ തുടങ്ങുന്ന കുട്ടികൾക്കായി പ്രത്യേകം ഒരുക്കിയ കുറിപ്പുകളും ഗെയിംസും.</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="notes">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    കുറിപ്പുകൾ
+  </button>
+  <button class="tab-btn" data-tab="games">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M7 11v4M5 13h4M15 13h.01M18 11h.01"/></svg>
+    ഗെയിംസ്
+  </button>
+</div>
+
+<section class="content-section">
+  <div class="container">
+    <div class="panel active" id="panel-notes">
+      <div class="items-grid" id="grid-notes"><p class="loading">ലോഡ് ചെയ്യുന്നു...</p></div>
+    </div>
+    <div class="panel" id="panel-games">
+      <div class="items-grid" id="grid-games"><p class="loading">ലോഡ് ചെയ്യുന്നു...</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">© 2026 അക്ഷരം. തുടക്കക്കാർക്കുള്ള പുതിയ ഉള്ളടക്കം ഉടൻ ചേർക്കും.</footer>
+
+<script>
+  var OWNER = 'dalwindavis-malayalam';
+  var REPO = '-';
+
+  function humanize(name){
+    var n = name.replace(/\.[^/.]+$/, '');
+    n = n.replace(/[_-]+/g, ' ');
+    return n;
+  }
+  function isPlayable(name){ return /\.html?$/i.test(name); }
+  function pagesUrl(folder, filename){
+    return 'https://' + OWNER + '.github.io/' + REPO + '/' + folder + '/beginner/' + encodeURIComponent(filename);
+  }
+
+  function renderNoteCards(container, files){
+    if (!files.length){
+      container.innerHTML = '<div class="empty-state">ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      return;
+    }
+    container.innerHTML = '';
+    files.forEach(function(f, i){
+      var card = document.createElement('div');
+      card.className = 'item-card glass reveal';
+      card.style.transitionDelay = (i * 0.06) + 's';
+      card.innerHTML =
+        '<div class="item-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>' +
+        '<div class="item-title">' + humanize(f.name) + '</div>' +
+        '<div class="item-desc">തുടക്കക്കാർക്കുള്ള മലയാളം കുറിപ്പ്</div>' +
+        '<a class="item-action glass pill" href="' + f.download_url + '" download>' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> ഡൗൺലോഡ്' +
+        '</a>';
+      container.appendChild(card);
+      requestAnimationFrame(function(){ setTimeout(function(){ card.classList.add('visible'); }, 30); });
+    });
+  }
+
+  function renderGameCards(container, files){
+    if (!files.length){
+      container.innerHTML = '<div class="empty-state">ഇതുവരെ ഗെയിംസ് ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      return;
+    }
+    container.innerHTML = '';
+    files.forEach(function(f, i){
+      var playable = isPlayable(f.name);
+      var actionUrl = playable ? pagesUrl('games', f.name) : f.download_url;
+      var card = document.createElement('div');
+      card.className = 'item-card glass reveal';
+      card.style.transitionDelay = (i * 0.06) + 's';
+      card.innerHTML =
+        '<div class="item-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M7 11v4M5 13h4M15 13h.01M18 11h.01"/></svg></div>' +
+        '<div class="item-title">' + humanize(f.name) + '</div>' +
+        '<div class="item-desc">തുടക്കക്കാർക്കുള്ള മലയാളം ഗെയിം</div>' +
+        '<a class="item-action glass pill" href="' + actionUrl + '" target="_blank" rel="noopener">' +
+          (playable
+            ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> കളിക്കുക'
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> ഡൗൺലോഡ്') +
+        '</a>';
+      container.appendChild(card);
+      requestAnimationFrame(function(){ setTimeout(function(){ card.classList.add('visible'); }, 30); });
+    });
+  }
+
+  function loadFolder(path, container, renderFn){
+    fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path)
+      .then(function(res){ if (!res.ok) throw new Error('nf'); return res.json(); })
+      .then(function(data){
+        var files = data.filter(function(item){ return item.type === 'file' && !item.name.startsWith('.'); });
+        renderFn(container, files);
+      })
+      .catch(function(){
+        container.innerHTML = '<div class="empty-state">ഇതുവരെ ഒന്നും ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      });
+  }
+
+  loadFolder('notes/beginner', document.getElementById('grid-notes'), renderNoteCards);
+  loadFolder('games/beginner', document.getElementById('grid-games'), renderGameCards);
+
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

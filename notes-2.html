@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>കുറിപ്പുകൾ — അക്ഷരം</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
+  :root{ --font-body:'Noto Sans Malayalam','Manjari','Meera',system-ui,sans-serif; --font-serif:'Instrument Serif','Manjari',serif; }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; background:#000; }
+  body{ background:#000; font-family: var(--font-body); color:#fff; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; }
+  .serif{ font-family: var(--font-serif); font-style:italic; }
+  .container{ max-width:1100px; margin:0 auto; padding:0 24px; }
+
+  .glass{ background: rgba(255,255,255,0.01); background-blend-mode: luminosity; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border:none; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1); position:relative; overflow:hidden; }
+  .glass::before{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1.4px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; }
+  .pill{ border-radius:999px; }
+  button:focus-visible, a:focus-visible{ outline:2px solid rgba(255,255,255,0.6); outline-offset:2px; }
+
+  .reveal{ opacity:0; transform:translateY(30px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){ .reveal{ transition:none; opacity:1; transform:none; } }
+
+  .bg-glow{ position:fixed; inset:0; z-index:0; pointer-events:none;
+    background: radial-gradient(circle at 15% 10%, rgba(255,120,80,0.10) 0%, transparent 40%), radial-gradient(circle at 85% 25%, rgba(90,160,255,0.10) 0%, transparent 40%), radial-gradient(circle at 50% 90%, rgba(150,255,180,0.07) 0%, transparent 45%); }
+
+  .nav-wrap{ position:relative; z-index:20; padding:24px; }
+  .nav{ max-width:960px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-radius:999px; }
+  .nav-left{ display:flex; align-items:center; gap:8px; }
+  .brand{ font-size:1.1rem; font-weight:600; margin-left:8px; }
+  .back-link{ font-size:0.85rem; color:rgba(255,255,255,0.7); display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .back-link:hover{ color:#fff; }
+
+  .page-header{ position:relative; z-index:1; padding:40px 24px 10px; text-align:center; }
+  .eyebrow{ color:rgba(255,255,255,0.4); font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:12px; }
+  .page-title{ font-family: var(--font-serif); font-style:italic; font-size:clamp(2.6rem,9vw,4.5rem); letter-spacing:-0.02em; margin-bottom:16px; }
+  .page-sub{ color:rgba(255,255,255,0.55); font-size:0.95rem; max-width:480px; margin:0 auto; line-height:1.6; }
+
+  .tabs{ position:relative; z-index:1; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; padding:32px 24px 8px; }
+  .tab-btn{ padding:10px 24px; border-radius:999px; font-size:0.9rem; font-weight:600; background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6); transition:all .2s; border:1px solid rgba(255,255,255,0.08); }
+  .tab-btn.active{ background:#fff; color:#000; }
+
+  .notes-section{ position:relative; z-index:1; padding:24px 24px 100px; }
+  .class-panel{ display:none; }
+  .class-panel.active{ display:block; }
+  .notes-grid{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:20px; }
+  @media (min-width:640px){ .notes-grid{ grid-template-columns:1fr 1fr; } }
+  @media (min-width:960px){ .notes-grid{ grid-template-columns:1fr 1fr 1fr; } }
+
+  .note-card{ border-radius:24px; padding:24px; display:flex; flex-direction:column; gap:16px; transition:transform .25s ease; }
+  .note-card:hover{ transform:translateY(-4px); }
+  .note-icon{ width:52px; height:52px; border-radius:16px; display:flex; align-items:center; justify-content:center; background:rgba(255,140,90,0.18); color:#ff9d70; }
+  .note-subject{ font-size:1.05rem; font-weight:600; word-break:break-word; }
+  .note-desc{ color:rgba(255,255,255,0.5); font-size:0.8rem; line-height:1.5; flex:1; }
+  .note-download{ display:flex; align-items:center; justify-content:center; gap:8px; padding:12px 20px; border-radius:999px; font-size:0.85rem; font-weight:500; background:rgba(255,255,255,0.08); transition:background .2s, transform .15s; }
+  .note-download:hover{ background:rgba(255,255,255,0.16); }
+  .note-download:active{ transform:scale(0.96); }
+
+  .empty-state{ text-align:center; color:rgba(255,255,255,0.4); font-size:0.9rem; padding:48px 24px; max-width:420px; margin:0 auto; line-height:1.7; }
+  .empty-state a{ color:#fff; text-decoration:underline; }
+  .loading{ text-align:center; color:rgba(255,255,255,0.35); font-size:0.85rem; padding:40px 0; }
+
+  .site-footer{ position:relative; z-index:1; text-align:center; color:rgba(255,255,255,0.3); font-size:0.75rem; padding:0 24px 40px; }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="nav-wrap">
+  <nav class="nav glass pill">
+    <div class="nav-left">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
+      <span class="brand serif">അക്ഷരം</span>
+    </div>
+    <a href="index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      ഹോമിലേക്ക്
+    </a>
+  </nav>
+</div>
+
+<header class="page-header">
+  <p class="eyebrow reveal">മലയാളം കുറിപ്പുകൾ</p>
+  <h1 class="page-title reveal" style="transition-delay:.1s">കുറിപ്പുകൾ</h1>
+  <p class="page-sub reveal" style="transition-delay:.2s">ക്ലാസ് തിരഞ്ഞെടുത്ത് PDF കുറിപ്പുകൾ ഡൗൺലോഡ് ചെയ്യാം.</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-class="class4">Class 4</button>
+  <button class="tab-btn" data-class="class6">Class 6</button>
+  <button class="tab-btn" data-class="class9">Class 9</button>
+</div>
+
+<section class="notes-section">
+  <div class="container">
+    <div class="class-panel active" id="panel-class4">
+      <div class="notes-grid" id="grid-class4"><p class="loading">ലോഡ് ചെയ്യുന്നു...</p></div>
+    </div>
+    <div class="class-panel" id="panel-class6">
+      <div class="notes-grid" id="grid-class6"><p class="loading">ലോഡ് ചെയ്യുന്നു...</p></div>
+    </div>
+    <div class="class-panel" id="panel-class9">
+      <div class="notes-grid" id="grid-class9"><p class="loading">ലോഡ് ചെയ്യുന്നു...</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">© 2026 അക്ഷരം. പുതിയ കുറിപ്പുകൾ ഉടൻ ചേർക്കും.</footer>
+
+<script>
+  var OWNER = 'dalwindavis-malayalam';
+  var REPO = '-';
+
+  function humanize(name){
+    var n = name.replace(/\.[^/.]+$/, '');
+    n = n.replace(/[_-]+/g, ' ');
+    return n;
+  }
+
+  function renderCards(container, files){
+    if (!files.length){
+      container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      return;
+    }
+    container.innerHTML = '';
+    files.forEach(function(f, i){
+      var card = document.createElement('div');
+      card.className = 'note-card glass reveal';
+      card.style.transitionDelay = (i * 0.06) + 's';
+      card.innerHTML =
+        '<div class="note-icon">' +
+          '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>' +
+        '</div>' +
+        '<div class="note-subject">' + humanize(f.name) + '</div>' +
+        '<div class="note-desc">മലയാളം കുറിപ്പ്</div>' +
+        '<a class="note-download glass pill" href="' + f.download_url + '" download>' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>' +
+          'ഡൗൺലോഡ്' +
+        '</a>';
+      container.appendChild(card);
+      requestAnimationFrame(function(){
+        setTimeout(function(){ card.classList.add('visible'); }, 30);
+      });
+    });
+  }
+
+  function loadClass(cls){
+    var container = document.getElementById('grid-' + cls);
+    fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/notes/' + cls)
+      .then(function(res){
+        if (!res.ok) throw new Error('not found');
+        return res.json();
+      })
+      .then(function(data){
+        var files = data.filter(function(item){
+          return item.type === 'file' && !item.name.startsWith('.');
+        });
+        renderCards(container, files);
+      })
+      .catch(function(){
+        container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      });
+  }
+
+  ['class4', 'class6', 'class9'].forEach(loadClass);
+
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.class-panel').forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.class).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
