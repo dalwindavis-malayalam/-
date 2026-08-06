@@ -131,7 +131,7 @@
 
   function renderNoteCards(container, files){
     if (!files.length){
-      container.innerHTML = '<div class="empty-state">ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      container.innerHTML = '<div class="empty-state">ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല.</div>';
       return;
     }
     container.innerHTML = '';
@@ -153,7 +153,7 @@
 
   function renderGameCards(container, files){
     if (!files.length){
-      container.innerHTML = '<div class="empty-state">ഇതുവരെ ഗെയിംസ് ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      container.innerHTML = '<div class="empty-state">ഇതുവരെ ഗെയിംസ് ചേർത്തിട്ടില്ല.</div>';
       return;
     }
     container.innerHTML = '';
@@ -185,7 +185,7 @@
         renderFn(container, files);
       })
       .catch(function(){
-        container.innerHTML = '<div class="empty-state">ഇതുവരെ ഒന്നും ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+        container.innerHTML = '<div class="empty-state">ഇതുവരെ ഒന്നും ചേർത്തിട്ടില്ല.</div>';
       });
   }
 
