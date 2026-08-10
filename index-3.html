@@ -132,6 +132,9 @@
   }
   .social-btn:hover{ color:#fff; background:rgba(255,255,255,0.05); }
 
+  /* ================= SCROLL VIDEO ================= */
+  .scroll-video-section{ position:relative; background:#000; }
+
   /* ================= ABOUT ================= */
   .about{ padding:110px 24px 40px; position:relative; }
   .about-glow{
@@ -271,6 +274,17 @@
   </div>
 </section>
 
+<!-- ================= SCROLL VIDEO ================= -->
+<section class="scroll-video-section">
+  <div id="scroll-container" style="height: 400vh; position: relative;">
+    <video id="scrollVideo" muted playsinline preload="auto"
+           style="position: sticky; top: 0; width: 100%; height: 100vh; object-fit: cover;">
+      <source src="videos/class-video-web.mp4" type="video/mp4">
+    </video>
+    <div style="position: sticky; top: 0; height: 100vh; background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent 30%, transparent 70%, rgba(0,0,0,0.5)); pointer-events: none;"></div>
+  </div>
+</section>
+
 <!-- ================= ABOUT ================= -->
 <section class="about" id="about">
   <div class="about-glow"></div>
@@ -404,6 +418,21 @@
       }, 100);
     });
   }
+
+  // ---- Scroll-linked video scrubbing ----
+  (function(){
+    var video = document.getElementById('scrollVideo');
+    var container = document.getElementById('scroll-container');
+    if (!video || !container) return;
+    video.addEventListener('loadedmetadata', function(){
+      window.addEventListener('scroll', function(){
+        var rect = container.getBoundingClientRect();
+        var progress = -rect.top / (rect.height - window.innerHeight);
+        var clamped = Math.min(Math.max(progress, 0), 1);
+        video.currentTime = clamped * video.duration;
+      }, { passive: true });
+    });
+  })();
 
   var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
   var io = new IntersectionObserver(function(entries){
