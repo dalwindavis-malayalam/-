@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>കുഞ്ഞക്ഷരക്കൂട്ട്</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFF6E9;
+  --cream2:#FFEFD6;
+  --navy:#1B2A4A;
+  --navy2:#243759;
+  --parrot:#3CB878;
+  --parrot-d:#279159;
+  --mango:#FFB627;
+  --mango-d:#E89D0E;
+  --coral:#FF6B5B;
+  --coral-d:#E44F3F;
+  --teal:#2EC4B6;
+  --teal-d:#1FA79A;
+  --plum:#7B4FB5;
+  --plum-d:#623C93;
+  --white:#FFFFFF;
+  --shadow: 0 10px 30px rgba(27,42,74,0.18);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;height:100%;background:var(--navy);overscroll-behavior:none;}
+body{
+  font-family:'Noto Sans Malayalam',sans-serif;
+  color:var(--navy);
+  width:100%;height:100vh;height:100dvh;overflow:hidden;
+}
+.display{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700;}
+.numfont{font-family:'Fredoka','Noto Sans Malayalam',sans-serif;}
+
+.stage{position:relative; width:100%; height:100%; perspective:2200px; overflow:hidden;}
+
+/* ---------- shared background sky ---------- */
+.bgsky{position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse at 15% 10%, rgba(255,182,39,0.25), transparent 45%),
+    radial-gradient(ellipse at 85% 85%, rgba(60,184,120,0.25), transparent 50%),
+    linear-gradient(160deg, var(--cream), var(--cream2) 60%, #FFE3B8 100%);
+}
+.cloud{position:absolute; opacity:.55; filter:blur(.5px); pointer-events:none;}
+.cloud svg{display:block;}
+
+/* ---------- screens ---------- */
+.screen{
+  position:absolute; inset:0; display:none; flex-direction:column;
+  align-items:center; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch; padding:18px 16px 40px;
+  transform-style:preserve-3d; backface-visibility:hidden; z-index:2;
+}
+.screen.active{display:flex;}
+.screen.flip-out{display:flex; animation:flipOut .5s cubic-bezier(.5,0,.4,1) forwards;}
+.screen.incoming{display:flex; animation:flipIn .5s cubic-bezier(.2,.6,.4,1) forwards;}
+@keyframes flipOut{from{transform:rotateY(0) scale(1); opacity:1;} to{transform:rotateY(-80deg) scale(.82); opacity:0;}}
+@keyframes flipIn{from{transform:rotateY(80deg) scale(.82); opacity:0;} to{transform:rotateY(0) scale(1); opacity:1;}}
+
+/* ---------- top marks badge ---------- */
+.topbar{position:fixed; top:0; left:0; right:0; z-index:20; display:flex; justify-content:space-between; align-items:flex-start; padding:12px 14px; pointer-events:none;}
+.badge{pointer-events:auto; background:var(--navy); color:var(--cream); border-radius:999px; padding:8px 16px 8px 10px; display:flex; align-items:center; gap:8px; box-shadow:var(--shadow); font-family:'Fredoka'; font-weight:600; font-size:15px; border:2px solid rgba(255,255,255,.15);}
+.badge .ic{font-size:20px;}
+.homebtn{pointer-events:auto; background:var(--white); border:2px solid var(--navy); color:var(--navy); border-radius:999px; padding:8px 14px; font-family:'Fredoka'; font-weight:600; font-size:14px; cursor:pointer; box-shadow:var(--shadow); display:flex; align-items:center; gap:6px;}
+.homebtn:active{transform:scale(.95);}
+
+/* ================= TITLE SCREEN ================= */
+#screen-title{justify-content:center; padding-top:60px;}
+.letterfield{position:absolute; inset:0; z-index:1; pointer-events:none; transform-style:preserve-3d;}
+.flyletter{position:absolute; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-weight:700; color:var(--navy); opacity:.16; animation:driftSpin linear infinite;}
+@keyframes driftSpin{
+  0%{transform:translateY(0) rotateY(0deg) rotateX(0deg);}
+  50%{transform:translateY(-22px) rotateY(180deg) rotateX(40deg);}
+  100%{transform:translateY(0) rotateY(360deg) rotateX(0deg);}
+}
+.title-card{position:relative; z-index:3; max-width:520px; width:100%; text-align:center; background:rgba(255,255,255,.72); backdrop-filter:blur(6px); border-radius:28px; padding:30px 22px 26px; box-shadow:var(--shadow); border:3px solid var(--white); margin-top:10px;}
+.eyebrow{font-size:13px; letter-spacing:.5px; color:var(--plum); font-weight:700; margin-bottom:6px;}
+.maintitle{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-weight:800; font-size:clamp(30px,8vw,44px); color:var(--navy); line-height:1.15; margin:2px 0 6px; text-shadow:2px 3px 0 rgba(255,182,39,.5);}
+.subtitle{font-size:16px; color:var(--navy2); margin-bottom:16px;}
+.parrot-hero{width:120px; margin:6px auto 8px; animation:bob 2.6s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-10px) rotate(2deg);}}
+.credit{margin-top:14px; padding-top:14px; border-top:2px dashed rgba(27,42,74,.25); font-size:14px; color:var(--navy2); line-height:1.7;}
+.credit b{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; color:var(--navy); font-size:17px;}
+.buddyrow{display:flex; justify-content:center; gap:7px; margin:6px 0 10px;}
+.buddy{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-weight:700; font-size:16px; color:#fff; box-shadow:0 3px 6px rgba(0,0,0,.18); animation:buddyBounce 1.3s ease-in-out infinite;}
+.buddy:nth-child(1){background:var(--coral); animation-delay:0s;}
+.buddy:nth-child(2){background:var(--mango); animation-delay:.13s;}
+.buddy:nth-child(3){background:var(--teal); animation-delay:.26s;}
+.buddy:nth-child(4){background:var(--plum); animation-delay:.39s;}
+.buddy:nth-child(5){background:var(--parrot); animation-delay:.52s;}
+@keyframes buddyBounce{0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-9px);}}
+.startbtn{margin-top:18px; border:none; cursor:pointer; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-weight:700; font-size:20px; color:#fff; background:linear-gradient(135deg,var(--coral),var(--mango)); padding:14px 34px; border-radius:999px; box-shadow:0 8px 0 var(--coral-d), var(--shadow); transition:transform .15s;}
+.startbtn:active{transform:translateY(6px); box-shadow:0 2px 0 var(--coral-d);}
+
+/* ================= HUB (2 tabs) ================= */
+#screen-hub{justify-content:center; padding-top:70px;}
+.hub-wrap{max-width:640px; width:100%; text-align:center;}
+.hub-title{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-weight:800; font-size:clamp(24px,6vw,32px); color:var(--navy); margin-bottom:6px;}
+.hub-sub{color:var(--navy2); margin-bottom:22px; font-size:15px;}
+.tabgrid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+@media(max-width:480px){.tabgrid{grid-template-columns:1fr;}}
+.tabcard{position:relative; border-radius:26px; padding:26px 18px 22px; cursor:pointer; color:#fff; box-shadow:var(--shadow); overflow:hidden; transform-style:preserve-3d; transition:transform .12s ease; border:3px solid rgba(255,255,255,.4);}
+.tabcard:active{transform:scale(.97);}
+.tabcard.activity{background:linear-gradient(150deg,var(--teal),var(--teal-d));}
+.tabcard.game{background:linear-gradient(150deg,var(--plum),var(--plum-d));}
+.tabcard .ic{font-size:46px; display:block; margin-bottom:8px; filter:drop-shadow(0 4px 6px rgba(0,0,0,.2));}
+.tabcard h3{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:24px; margin:0 0 4px;}
+.tabcard p{margin:0; font-size:13.5px; opacity:.92;}
+.tabcard .prog{margin-top:12px; background:rgba(255,255,255,.3); border-radius:999px; height:9px; overflow:hidden;}
+.tabcard .prog i{display:block; height:100%; background:#fff; border-radius:999px; width:0%; transition:width .5s;}
+
+/* ================= SECTION HUBS (activity/game list) ================= */
+.sechub-wrap{max-width:640px; width:100%; padding-top:56px;}
+.sechub-head{text-align:center; margin-bottom:18px;}
+.sechub-head h2{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:clamp(22px,6vw,28px); margin:2px 0 6px; color:var(--navy);}
+.totalbar{background:var(--white); border-radius:999px; padding:6px 6px 6px 14px; display:flex; align-items:center; gap:10px; box-shadow:0 4px 10px rgba(27,42,74,.12); max-width:340px; margin:0 auto;}
+.totalbar span{font-family:'Fredoka'; font-weight:600; font-size:13px; color:var(--navy2); white-space:nowrap;}
+.totalbar .track{flex:1; background:var(--cream2); border-radius:999px; height:12px; overflow:hidden;}
+.totalbar .fill{height:100%; border-radius:999px; background:linear-gradient(90deg,var(--mango),var(--coral)); width:0%; transition:width .6s;}
+
+.cardgrid{display:grid; grid-template-columns:1fr 1fr; gap:14px; width:100%; margin-top:16px;}
+@media(max-width:520px){.cardgrid{grid-template-columns:1fr;}}
+.itemcard{background:var(--white); border-radius:20px; padding:16px 14px; box-shadow:0 6px 16px rgba(27,42,74,.12); cursor:pointer; text-align:left; border:3px solid transparent; transform-style:preserve-3d; transition:transform .15s;}
+.itemcard:active{transform:scale(.96);}
+.itemcard .top{display:flex; align-items:center; gap:10px;}
+.itemcard .ic{font-size:30px;}
+.itemcard h4{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:16.5px; margin:0; color:var(--navy); line-height:1.25;}
+.itemcard .stat{margin-top:10px; font-family:'Fredoka'; font-size:13px; font-weight:600; color:var(--navy2); display:flex; align-items:center; gap:6px;}
+.itemcard.done{border-color:var(--parrot);}
+.itemcard.done .stat{color:var(--parrot-d);}
+
+.celebrate-banner{width:100%; max-width:600px; background:linear-gradient(120deg,var(--mango),var(--coral)); color:#fff; border-radius:20px; padding:14px 18px; text-align:center; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:16px; margin-bottom:14px; box-shadow:var(--shadow); display:none;}
+.celebrate-banner.show{display:block; animation:pop .5s ease;}
+@keyframes pop{0%{transform:scale(.7); opacity:0;}60%{transform:scale(1.06);}100%{transform:scale(1); opacity:1;}}
+
+/* ================= PLAY SCREENS ================= */
+.play-wrap{max-width:640px; width:100%; padding-top:56px;}
+.play-head{text-align:center; margin-bottom:14px;}
+.play-head h2{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:clamp(20px,5.5vw,26px); color:var(--navy); margin:2px 0;}
+.qcard{background:var(--white); border-radius:20px; padding:16px 16px 18px; margin-bottom:14px; box-shadow:0 6px 16px rgba(27,42,74,.1);}
+.mcq-question{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:19px; color:var(--navy); margin-bottom:12px; text-align:center;}
+.mcq-options{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.mcq-chip{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:16px; padding:12px 8px; border-radius:14px; border:2.5px solid var(--cream2); background:var(--cream); color:var(--navy); cursor:pointer; transition:transform .1s, background .2s;}
+.mcq-chip:active{transform:scale(.96);}
+.mcq-chip:disabled{cursor:default;}
+.mcq-chip.correct{background:var(--parrot); border-color:var(--parrot-d); color:#fff; animation:pop .35s ease;}
+.mcq-chip.wrong{background:var(--coral); border-color:var(--coral-d); color:#fff; animation:shake .4s;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+.backrow{display:flex; gap:10px; justify-content:center; margin-top:6px; width:100%;}
+.pillbtn{font-family:'Fredoka'; font-weight:600; font-size:14px; padding:10px 20px; border-radius:999px; border:none; cursor:pointer; box-shadow:0 4px 10px rgba(27,42,74,.15);}
+.pillbtn.ghost{background:var(--white); color:var(--navy); border:2px solid var(--navy);}
+.pillbtn.solid{background:var(--parrot); color:#fff;}
+.pillbtn:active{transform:scale(.95);}
+
+/* ================= GAME AREAS ================= */
+.gamearea{width:100%; max-width:640px;}
+.gamehead{text-align:center; margin-bottom:10px;}
+.gamehead h2{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:clamp(20px,5.5vw,25px); color:var(--navy); margin:2px 0;}
+.roundinfo{font-family:'Fredoka'; font-size:13px; color:var(--navy2); font-weight:600;}
+
+/* Catch game */
+.catchbox{position:relative; height:min(58vh,420px); background:linear-gradient(180deg,#BFEFFF,#E8FFF3); border-radius:22px; overflow:hidden; box-shadow:inset 0 0 0 4px #fff, var(--shadow); margin-top:6px;}
+.catch-target{position:absolute; top:10px; left:0; right:0; text-align:center; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:15px; color:var(--navy); z-index:5;}
+.catch-target b{font-size:26px; color:var(--coral-d);}
+.bubble{position:absolute; bottom:-60px; width:56px; height:56px; border-radius:50%; background:var(--white); border:3px solid var(--teal); display:flex; align-items:center; justify-content:center; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:22px; color:var(--navy); box-shadow:0 4px 8px rgba(0,0,0,.15); cursor:pointer; animation:rise linear forwards;}
+@keyframes rise{from{transform:translateY(0) translateX(0);} to{transform:translateY(-480px) translateX(var(--drift,0px));}}
+.bubble.shake{animation:shakeb .4s;}
+@keyframes shakeb{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+
+/* Memory game */
+.memgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:8px;}
+@media(max-width:420px){.memgrid{grid-template-columns:repeat(3,1fr);}}
+.memcard{aspect-ratio:1/1; border-radius:14px; background:var(--plum); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 8px rgba(0,0,0,.15); transform-style:preserve-3d; transition:transform .35s;}
+.memcard .face{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; border-radius:14px; backface-visibility:hidden; font-size:22px; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700;}
+.memcard{position:relative;}
+.memcard .back{background:linear-gradient(150deg,var(--plum),var(--plum-d)); color:#fff; font-size:26px;}
+.memcard .front{background:#fff; color:var(--navy); transform:rotateY(180deg); flex-direction:column; gap:2px; padding:2px; text-align:center;}
+.memcard.flipped{transform:rotateY(180deg);}
+.memcard.matched .front{background:var(--parrot); color:#fff;}
+.memcard.matched{opacity:.85;}
+
+/* Builder game */
+.buildbox{background:var(--white); border-radius:20px; padding:18px; text-align:center; margin-top:6px; box-shadow:var(--shadow);}
+.buildbox .emoji{font-size:52px;}
+.slots{display:flex; justify-content:center; gap:8px; margin:14px 0;}
+.slot{width:42px; height:48px; border-radius:10px; border:3px dashed var(--cream2); display:flex; align-items:center; justify-content:center; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:22px; background:var(--cream);}
+.slot.filled{border-style:solid; border-color:var(--parrot); background:#eafff3;}
+.tilepool{display:flex; justify-content:center; gap:8px; flex-wrap:wrap;}
+.tile{width:46px; height:46px; border-radius:10px; background:var(--mango); color:#fff; border:none; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:20px; cursor:pointer; box-shadow:0 4px 0 var(--mango-d);}
+.tile:active{transform:translateY(3px); box-shadow:0 1px 0 var(--mango-d);}
+.tile.used{visibility:hidden;}
+.tile.shake{animation:shake .4s;}
+
+/* Speed sentence timer */
+.timerbar{height:9px; border-radius:999px; background:var(--cream2); overflow:hidden; margin-bottom:12px;}
+.timerbar i{display:block; height:100%; background:linear-gradient(90deg,var(--parrot),var(--mango)); width:100%; transition:width linear;}
+
+/* True/false */
+.tfrow{display:flex; gap:12px; justify-content:center; margin-top:6px;}
+.tfbtn{flex:1; max-width:150px; font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:18px; padding:16px 8px; border-radius:16px; border:none; cursor:pointer; color:#fff; box-shadow:0 5px 0 rgba(0,0,0,.15);}
+.tfbtn.t{background:var(--parrot);}
+.tfbtn.f{background:var(--coral);}
+.tfbtn:active{transform:translateY(3px);}
+.parrot-react{width:90px; margin:6px auto; display:block; transition:transform .25s;}
+
+/* points pop */
+.floatpts{position:fixed; z-index:50; font-family:'Fredoka'; font-weight:700; font-size:22px; color:var(--mango-d); pointer-events:none; animation:ptsUp 1s ease forwards;}
+@keyframes ptsUp{0%{opacity:0; transform:translateY(0) scale(.6);}20%{opacity:1; transform:translateY(-10px) scale(1.1);}100%{opacity:0; transform:translateY(-70px) scale(1);}}
+
+#confettiCanvas{position:fixed; inset:0; z-index:100; pointer-events:none; width:100%; height:100%;}
+
+.finalcard{background:linear-gradient(150deg,var(--navy),var(--navy2)); color:#fff; border-radius:24px; padding:26px 20px; text-align:center; max-width:420px; margin:20px auto 0; box-shadow:var(--shadow);}
+.finalcard h2{font-family:'Noto Sans Malayalam',sans-serif; font-weight:700; font-size:26px; margin:6px 0;}
+.finalcard .score{font-family:'Fredoka'; font-size:38px; color:var(--mango); font-weight:700; margin:8px 0;}
+
+::-webkit-scrollbar{width:0;}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+
+<div class="topbar" id="topbar" style="display:none;">
+  <button class="homebtn" onclick="goHome()">🏠 ഹോം</button>
+  <div class="badge" id="marksBadge"><span class="ic">⭐</span><span id="marksText">0</span></div>
+</div>
+
+<div class="stage" id="stage">
+  <div class="bgsky"></div>
+
+  <!-- TITLE -->
+  <section class="screen active" id="screen-title">
+    <div class="letterfield" id="letterfield"></div>
+    <div class="title-card">
+      <div class="eyebrow">"അക്ഷരങ്ങൾ കൂട്ടുകാരാകുമ്പോൾ പഠനം കളിയാകും" 🌱<br><span style="font-size:11px;font-weight:600;opacity:.75">– Dalwin Davis</span></div>
+      <svg class="parrot-hero" viewBox="0 0 100 100">
+        <ellipse cx="50" cy="58" rx="26" ry="30" fill="#3CB878"/>
+        <ellipse cx="50" cy="58" rx="14" ry="22" fill="#FFB627"/>
+        <circle cx="50" cy="30" r="18" fill="#3CB878"/>
+        <circle cx="43" cy="27" r="4.5" fill="#1B2A4A"/>
+        <circle cx="44.5" cy="25.5" r="1.4" fill="#fff"/>
+        <path d="M50 30 Q66 30 62 38 Q54 40 50 34 Z" fill="#FF6B5B"/>
+        <path d="M32 55 Q10 50 14 70 Q30 74 36 60 Z" fill="#2A9860"/>
+        <path d="M40 15 Q50 2 60 15 Q54 20 50 16 Q46 20 40 15 Z" fill="#279159"/>
+      </svg>
+      <div class="maintitle">കുഞ്ഞക്ഷരക്കൂട്ട്</div>
+      <div class="buddyrow">
+        <div class="buddy">അ</div><div class="buddy">ക</div><div class="buddy">ത</div><div class="buddy">ള</div><div class="buddy">മ</div>
+      </div>
+      <div class="subtitle">കളിച്ചു പഠിക്കാം, രസിച്ചു ജയിക്കാം! 🎉</div>
+      <button class="startbtn" onclick="startApp()">🚀 തുടങ്ങാം</button>
+      <div class="credit">
+        തയ്യാറാക്കിയത്<br>
+        <b>Dalwin Davis</b><br>
+        വിശ്വജ്യോതി പബ്ലിക്‌ സ്കൂൾ അങ്കമാലി<br>
+        മലയാള വിഭാഗം
+      </div>
+    </div>
+  </section>
+
+  <!-- HUB -->
+  <section class="screen" id="screen-hub">
+    <div class="hub-wrap">
+      <div class="hub-title">🦜 എന്താണ് ഇന്ന് പഠിക്കേണ്ടത്?</div>
+      <div class="hub-sub">ഒരെണ്ണം തിരഞ്ഞെടുക്കൂ...</div>
+      <div class="tabgrid">
+        <div class="tabcard activity" onclick="openSectionHub('activity')">
+          <span class="ic">📝</span>
+          <h3>ആക്ടിവിറ്റി</h3>
+          <p>5 രസകരമായ പഠന പ്രവർത്തനങ്ങൾ · 20 മാർക്ക്</p>
+          <div class="prog"><i id="actProgBar"></i></div>
+        </div>
+        <div class="tabcard game" onclick="openSectionHub('game')">
+          <span class="ic">🎮</span>
+          <h3>ഗെയിം</h3>
+          <p>5 ആവേശകരമായ കളികൾ · സ്കോർ നേടാം</p>
+          <div class="prog"><i id="gameProgBar"></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY HUB -->
+  <section class="screen" id="screen-activityhub">
+    <div class="sechub-wrap">
+      <div class="sechub-head">
+        <h2>📝 ആക്ടിവിറ്റികൾ</h2>
+        <div class="totalbar"><span>മൊത്തം മാർക്ക്</span><div class="track"><div class="fill" id="actTotalFill"></div></div><span id="actTotalText">0/20</span></div>
+      </div>
+      <div class="celebrate-banner" id="actCelebrate">🏆 എല്ലാ ആക്ടിവിറ്റിയും പൂർത്തിയായി! അഭിനന്ദനങ്ങൾ!</div>
+      <div class="cardgrid" id="actCardGrid"></div>
+      <div class="backrow"><button class="pillbtn ghost" onclick="goTo('screen-hub')">⬅ തിരികെ</button></div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY PLAY -->
+  <section class="screen" id="screen-activityplay">
+    <div class="play-wrap">
+      <div class="play-head"><h2 id="actPlayTitle"></h2></div>
+      <div id="actPlayBody"></div>
+      <div class="backrow"><button class="pillbtn ghost" onclick="goTo('screen-activityhub'); renderActivityHub();">⬅ ലിസ്റ്റിലേക്ക്</button></div>
+    </div>
+  </section>
+
+  <!-- GAME HUB -->
+  <section class="screen" id="screen-gamehub">
+    <div class="sechub-wrap">
+      <div class="sechub-head">
+        <h2>🎮 ഗെയിംസ്</h2>
+        <div class="totalbar"><span>മൊത്തം സ്കോർ</span><div class="track"><div class="fill" id="gameTotalFill"></div></div><span id="gameTotalText">0/500</span></div>
+      </div>
+      <div class="celebrate-banner" id="gameCelebrate">🏆 എല്ലാ ഗെയിമും ജയിച്ചു! നീ ഒരു സൂപ്പർ താരം!</div>
+      <div class="cardgrid" id="gameCardGrid"></div>
+      <div class="backrow"><button class="pillbtn ghost" onclick="goTo('screen-hub')">⬅ തിരികെ</button></div>
+    </div>
+  </section>
+
+  <!-- GAME PLAY -->
+  <section class="screen" id="screen-gameplay">
+    <div class="gamearea">
+      <div class="gamehead"><h2 id="gamePlayTitle"></h2><div class="roundinfo" id="gamePlayRound"></div></div>
+      <div id="gamePlayBody"></div>
+      <div class="backrow"><button class="pillbtn ghost" onclick="stopCurrentGame(); goTo('screen-gamehub'); renderGameHub();">⬅ ലിസ്റ്റിലേക്ക്</button></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ========================= AUDIO ========================= */
+let actx;
+function ctx(){ if(!actx){ try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return actx; }
+function beep(freq,dur,type,vol,delay){
+  const a=ctx(); if(!a) return;
+  const o=a.createOscillator(), g=a.createGain();
+  o.type=type||'sine'; o.frequency.value=freq; o.connect(g); g.connect(a.destination);
+  const t=a.currentTime+(delay||0);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol||.18,t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.001,t+(dur||.12));
+  o.start(t); o.stop(t+(dur||.12)+0.03);
+}
+const SND={
+  correct:()=>{beep(660,.1,'square',.16);beep(880,.16,'square',.16,.1);},
+  wrong:()=>{beep(170,.22,'sawtooth',.14);},
+  click:()=>{beep(520,.05,'sine',.1);},
+  whoosh:()=>{beep(220,.15,'sine',.06);},
+  win:()=>{[523,659,784,1046].forEach((f,i)=>beep(f,.2,'triangle',.18,i*0.12));},
+  pop:()=>{beep(900,.06,'square',.1);}
+};
+function playSound(n){ try{SND[n]&&SND[n]();}catch(e){} }
+
+/* ========================= NAV ========================= */
+function goTo(id){
+  const cur=document.querySelector('.screen.active');
+  const next=document.getElementById(id);
+  if(!next||cur===next) return;
+  playSound('whoosh');
+  cur.classList.add('flip-out');
+  next.classList.add('incoming');
+  document.getElementById('topbar').style.display = (id==='screen-title')?'none':'flex';
+  setTimeout(()=>{
+    cur.classList.remove('active','flip-out');
+    next.classList.remove('incoming');
+    next.classList.add('active');
+    next.scrollTop=0;
+    refreshMarksBadge();
+  },480);
+}
+function goHome(){ stopCurrentGame(); goTo('screen-hub'); updateHubProgress(); }
+function startApp(){ ctx(); playSound('click'); goTo('screen-hub'); updateHubProgress(); }
+function openSectionHub(kind){
+  if(kind==='activity'){ renderActivityHub(); goTo('screen-activityhub'); }
+  else { renderGameHub(); goTo('screen-gamehub'); }
+}
+
+/* ========================= FLOATING TITLE LETTERS ========================= */
+(function(){
+  const letters=['അ','ആ','ക','മ','ത','ള','പ','ട','ന','ര'];
+  const field=document.getElementById('letterfield');
+  const positions=[[6,10],[80,8],[10,70],[85,68],[45,4],[50,85],[20,40],[75,38],[5,90],[90,88]];
+  letters.forEach((l,i)=>{
+    const el=document.createElement('div');
+    el.className='flyletter'; el.textContent=l;
+    const sz=28+Math.random()*30;
+    el.style.fontSize=sz+'px';
+    el.style.left=positions[i][0]+'%'; el.style.top=positions[i][1]+'%';
+    el.style.animationDuration=(4+Math.random()*3)+'s';
+    el.style.animationDelay=(Math.random()*2)+'s';
+    field.appendChild(el);
+  });
+})();
+
+/* ========================= STATE ========================= */
+const state={
+  activity:{scores:[null,null,null,null,null]},
+  game:{scores:[0,0,0,0,0], done:[false,false,false,false,false]}
+};
+function actTotal(){ return state.activity.scores.reduce((s,v)=>s+(v||0),0); }
+function actMax(){ return 20; }
+function gameTotal(){ return state.game.scores.reduce((s,v)=>s+v,0); }
+function gameMax(){ return 500; }
+function updateHubProgress(){
+  document.getElementById('actProgBar').style.width=(actTotal()/actMax()*100)+'%';
+  document.getElementById('gameProgBar').style.width=(gameTotal()/gameMax()*100)+'%';
+  refreshMarksBadge();
+}
+function refreshMarksBadge(){
+  const active=document.querySelector('.screen.active').id;
+  const el=document.getElementById('marksText');
+  if(active.startsWith('screen-activity')) el.textContent = actTotal()+'/'+actMax()+' മാർക്ക്';
+  else if(active.startsWith('screen-game')) el.textContent = gameTotal()+' പോയിന്റ്';
+  else el.textContent = actTotal()+'/20 · '+gameTotal()+'pt';
+}
+
+function popPoints(x,y,text,color){
+  const p=document.createElement('div');
+  p.className='floatpts'; p.textContent=text; p.style.left=x+'px'; p.style.top=y+'px'; p.style.color=color||'';
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),1000);
+}
+
+/* ========================= CONFETTI ========================= */
+const cv=document.getElementById('confettiCanvas'); const cctx=cv.getContext('2d');
+function resizeCV(){ cv.width=innerWidth; cv.height=innerHeight; }
+resizeCV(); addEventListener('resize',resizeCV);
+let confettiParts=[];
+function burstConfetti(n){
+  n=n||90;
+  const colors=['#FF6B5B','#FFB627','#3CB878','#2EC4B6','#7B4FB5'];
+  for(let i=0;i<n;i++){
+    confettiParts.push({
+      x:cv.width/2+(Math.random()-.5)*120, y:cv.height*0.25+(Math.random()-.5)*60,
+      vx:(Math.random()-.5)*9, vy:-Math.random()*9-3, g:0.28,
+      r:4+Math.random()*4, rot:Math.random()*360, vr:(Math.random()-.5)*14,
+      color:colors[Math.floor(Math.random()*colors.length)], life:100+Math.random()*40
+    });
+  }
+  if(!confettiRunning){ confettiRunning=true; requestAnimationFrame(runConfetti); }
+}
+let confettiRunning=false;
+function runConfetti(){
+  cctx.clearRect(0,0,cv.width,cv.height);
+  confettiParts.forEach(p=>{
+    p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
+    cctx.save(); cctx.translate(p.x,p.y); cctx.rotate(p.rot*Math.PI/180);
+    cctx.fillStyle=p.color; cctx.fillRect(-p.r,-p.r*.6,p.r*2,p.r*1.2);
+    cctx.restore();
+  });
+  confettiParts=confettiParts.filter(p=>p.life>0 && p.y<cv.height+50);
+  if(confettiParts.length>0){ requestAnimationFrame(runConfetti); } else { confettiRunning=false; cctx.clearRect(0,0,cv.width,cv.height); }
+}
+
+/* ========================= CONTENT DATA ========================= */
+const ACTIVITIES=[
+ {title:"1. അർത്ഥം എഴുതുക", icon:"📘", questions:[
+   {q:"അമ്മ",options:["Mother","Father","Sister","Sea"],answer:"Mother"},
+   {q:"ആന",options:["Monkey","Elephant","Cat","Frog"],answer:"Elephant"},
+   {q:"കടൽ",options:["River","Sea","Well","Pond"],answer:"Sea"},
+   {q:"വാനരൻ",options:["Elephant","Monkey","Rat","Tiger"],answer:"Monkey"}
+ ]},
+ {title:"2. വിട്ടുപോയ അക്ഷരം കണ്ടെത്തുക", icon:"🔤", questions:[
+   {q:"ഉ ▢ ൽ  (ഉരൽ)",options:["ര","യ","സ"],answer:"ര"},
+   {q:"ത ▢ ള  (തവള)",options:["വ","യ","ക"],answer:"വ"},
+   {q:"എ ▢ ി  (എലി)",options:["ല","ത","ന"],answer:"ല"},
+   {q:"ക ▢ ൽ  (കടൽ)",options:["ട","ച","റ"],answer:"ട"}
+ ]},
+ {title:"3. ശരിയായ പദം തിരഞ്ഞെടുക്കുക", icon:"✍️", questions:[
+   {q:"ഇല ____",options:["പച്ച","കറുപ്പ്","മധുരിക്കും","പാൽ"],answer:"പച്ച"},
+   {q:"ആന ____",options:["മധുരിക്കും","പച്ച","കറുപ്പ്","പാൽ"],answer:"കറുപ്പ്"},
+   {q:"മാമ്പഴം ____",options:["പാൽ","കറുപ്പ്","പച്ച","മധുരിക്കും"],answer:"മധുരിക്കും"},
+   {q:"പൂച്ച ____ കുടിച്ചു",options:["പച്ച","പാൽ","മധുരിക്കും","കറുപ്പ്"],answer:"പാൽ"}
+ ]},
+ {title:"4. ചിഹ്നങ്ങൾ ചേർത്ത് വാക്ക് ഉണ്ടാക്കുക", icon:"🧩", questions:[
+   {q:"ക + ാ + ക + ക =",options:["കാക്ക","കക്ക","കാകാ","ക്കക"],answer:"കാക്ക"},
+   {q:"ക + ി + ള + ി =",options:["കളി","കിളി","ളികി","കിളാ"],answer:"കിളി"},
+   {q:"മ + ീ + ൻ =",options:["മാൻ","മിൻ","മീൻ","മുൻ"],answer:"മീൻ"},
+   {q:"പ + ു + ല + ി =",options:["പലി","പുലി","ലുപി","പൂലി"],answer:"പുലി"}
+ ]},
+ {title:"5. തത്തമ്മ കവിത - ചോദ്യങ്ങൾ", icon:"🦜", questions:[
+   {q:"തത്തമ്മയുടെ ചുണ്ടിന്റെ നിറം?",options:["മഞ്ഞ","ചുവപ്പ്","പച്ച","നീല"],answer:"ചുവപ്പ്"},
+   {q:"തത്തമ്മ എങ്ങനെയുള്ള വാക്കുകൾ പറയും?",options:["വലിയ വാക്കുകൾ","കൊച്ചു കൊച്ചു വാക്കുകൾ","പാട്ടുകൾ","ഒന്നും ഇല്ല"],answer:"കൊച്ചു കൊച്ചു വാക്കുകൾ"},
+   {q:"തത്തമ്മ ധരിച്ചിരിക്കുന്നത്?",options:["ചുവന്ന ഉടുപ്പ്","പച്ചപ്പട്ടുടുപ്പ്","മഞ്ഞ ഉടുപ്പ്","വെള്ള ഉടുപ്പ്"],answer:"പച്ചപ്പട്ടുടുപ്പ്"},
+   {q:"ആര് വരുമ്പോൾ തത്തമ്മ പറന്നുപോകും?",options:["നായ","പൂച്ച","കാക്ക","കുട്ടി"],answer:"പൂച്ച"}
+ ]}
+];
+
+const GAMES_META=[
+ {title:"1. അക്ഷരം പിടിക്കാം", icon:"🫧", desc:"പറക്കുന്ന അക്ഷരങ്ങളിൽ നിന്ന് ശരിയായത് പിടിക്കൂ"},
+ {title:"2. ചിത്രവും വാക്കും", icon:"🧠", desc:"ജോഡികൾ കണ്ടെത്തുന്ന മെമ്മറി ഗെയിം"},
+ {title:"3. വാക്ക് നിർമ്മാണം", icon:"🧱", desc:"അക്ഷരങ്ങൾ ചേർത്ത് വാക്ക് ഉണ്ടാക്കൂ"},
+ {title:"4. സ്പീഡ് വാചകം", icon:"⏱️", desc:"സമയത്തിനുള്ളിൽ ശരിയായ വാക്ക് കണ്ടെത്തൂ"},
+ {title:"5. തത്തമ്മ ക്വിസ്", icon:"🦜", desc:"അവസാന റൗണ്ട് - ശരി/തെറ്റ് ക്വിസ്"}
+];
+
+const MEMORY_PAIRS=[
+ {emoji:"🐘",word:"ആന"},{emoji:"🐸",word:"തവള"},{emoji:"🦜",word:"തത്ത"},
+ {emoji:"🐈",word:"പൂച്ച"},{emoji:"🐟",word:"മീൻ"},{emoji:"🐅",word:"പുലി"}
+];
+const BUILD_WORDS=[
+ {emoji:"🐦",target:"കാക്ക",tiles:["ക","ാ","ക","ക"]},
+ {emoji:"🐤",target:"കിളി",tiles:["ക","ി","ള","ി"]},
+ {emoji:"🐟",target:"മീൻ",tiles:["മ","ീ","ൻ"]},
+ {emoji:"🐅",target:"പുലി",tiles:["പ","ു","ല","ി"]},
+ {emoji:"☂️",target:"കുട",tiles:["ക","ു","ട"]}
+];
+const CATCH_LETTERS=["ആ","ഇ","ഉ","എ","ഒ"];
+const CATCH_POOL=["അ","ആ","ഇ","ഈ","ഉ","ഊ","എ","ഏ","ഒ","ഓ"];
+const SPEED_SENTENCES=[
+ {q:"അമ്മ ____.",options:["വന്നു","പോയി","ഉറങ്ങി"],answer:"വന്നു"},
+ {q:"ആന ____.",options:["വെളുപ്പ്","കറുപ്പ്","ചുവപ്പ്"],answer:"കറുപ്പ്"},
+ {q:"ഇല ____.",options:["മഞ്ഞ","നീല","പച്ച"],answer:"പച്ച"},
+ {q:"പൂച്ച പാൽ ____.",options:["തിന്നു","കുടിച്ചു","കണ്ടു"],answer:"കുടിച്ചു"},
+ {q:"മാമ്പഴം ____.",options:["പുളിക്കും","കയ്ക്കും","മധുരിക്കും"],answer:"മധുരിക്കും"}
+];
+const TF_QUIZ=[
+ {q:"അമ്മ എന്നാൽ Mother ആണ്.",answer:true},
+ {q:"ആനയുടെ നിറം വെളുപ്പാണ്.",answer:false},
+ {q:"തത്തമ്മയുടെ ഉടുപ്പ് പച്ചയാണ്.",answer:true},
+ {q:"പൂച്ച വരുമ്പോൾ തത്തമ്മ ഉറങ്ങും.",answer:false},
+ {q:"ക + ാ + ക + ക = കാക്ക",answer:true}
+];
+
+/* ========================= MCQ ENGINE ========================= */
+function renderMCQ(container,qObj,onDone){
+  const card=document.createElement('div'); card.className='qcard';
+  const qEl=document.createElement('div'); qEl.className='mcq-question'; qEl.textContent=qObj.q;
+  card.appendChild(qEl);
+  const opts=document.createElement('div'); opts.className='mcq-options';
+  qObj.options.forEach(opt=>{
+    const b=document.createElement('button'); b.className='mcq-chip'; b.textContent=opt;
+    b.onclick=(ev)=>{
+      if(b.disabled) return;
+      [...opts.children].forEach(c=>c.disabled=true);
+      const correct=opt===qObj.answer;
+      b.classList.add(correct?'correct':'wrong');
+      if(!correct){ [...opts.children].find(c=>c.textContent===qObj.answer).classList.add('correct'); }
+      playSound(correct?'correct':'wrong');
+      const rect=b.getBoundingClientRect();
+      if(correct) popPoints(rect.left+rect.width/2-10, rect.top, '+1', '#3CB878');
+      onDone(correct);
+    };
+    opts.appendChild(b);
+  });
+  card.appendChild(opts);
+  container.appendChild(card);
+}
+
+/* ========================= ACTIVITY HUB / PLAY ========================= */
+function renderActivityHub(){
+  const grid=document.getElementById('actCardGrid');
+  grid.innerHTML='';
+  ACTIVITIES.forEach((a,i)=>{
+    const done=state.activity.scores[i]!==null;
+    const card=document.createElement('div');
+    card.className='itemcard'+(done?' done':'');
+    card.onclick=()=>openActivity(i);
+    card.innerHTML=`<div class="top"><span class="ic">${a.icon}</span><h4>${a.title}</h4></div>
+      <div class="stat">${done? '✅ '+state.activity.scores[i]+'/4 മാർക്ക്' : '▶ ടാപ്പ് ചെയ്ത് തുടങ്ങൂ'}</div>`;
+    grid.appendChild(card);
+  });
+  document.getElementById('actTotalFill').style.width=(actTotal()/actMax()*100)+'%';
+  document.getElementById('actTotalText').textContent=actTotal()+'/20';
+  document.getElementById('actCelebrate').classList.toggle('show', state.activity.scores.every(s=>s!==null));
+  refreshMarksBadge();
+}
+function openActivity(i){
+  const a=ACTIVITIES[i];
+  document.getElementById('actPlayTitle').textContent=a.icon+' '+a.title;
+  const body=document.getElementById('actPlayBody');
+  body.innerHTML='';
+  let correctCount=0, answered=0;
+  a.questions.forEach(q=>{
+    renderMCQ(body,q,(correct)=>{
+      answered++; if(correct) correctCount++;
+      if(answered===a.questions.length){
+        const prevDone = state.activity.scores[i]!==null;
+        state.activity.scores[i]=correctCount;
+        refreshMarksBadge();
+        if(correctCount===4){ burstConfetti(70); playSound('win'); }
+        setTimeout(()=>{ renderActivityHub(); },400);
+      }
+    });
+  });
+  goTo('screen-activityplay');
+  refreshMarksBadge();
+}
+
+/* ========================= GAME HUB ========================= */
+function renderGameHub(){
+  const grid=document.getElementById('gameCardGrid');
+  grid.innerHTML='';
+  GAMES_META.forEach((g,i)=>{
+    const done=state.game.done[i];
+    const card=document.createElement('div');
+    card.className='itemcard'+(done?' done':'');
+    card.onclick=()=>openGame(i);
+    card.innerHTML=`<div class="top"><span class="ic">${g.icon}</span><h4>${g.title}</h4></div>
+      <div class="stat">${done? '✅ '+state.game.scores[i]+' പോയിന്റ്' : g.desc}</div>`;
+    grid.appendChild(card);
+  });
+  document.getElementById('gameTotalFill').style.width=(gameTotal()/gameMax()*100)+'%';
+  document.getElementById('gameTotalText').textContent=gameTotal()+'/500';
+  document.getElementById('gameCelebrate').classList.toggle('show', state.game.done.every(d=>d));
+  refreshMarksBadge();
+}
+let currentGameTimer=null, currentGameIntervals=[];
+function stopCurrentGame(){
+  if(currentGameTimer){ clearInterval(currentGameTimer); currentGameTimer=null; }
+  currentGameIntervals.forEach(id=>clearInterval(id));
+  currentGameIntervals=[];
+}
+function openGame(i){
+  stopCurrentGame();
+  document.getElementById('gamePlayTitle').textContent=GAMES_META[i].icon+' '+GAMES_META[i].title;
+  document.getElementById('gamePlayRound').textContent='';
+  const body=document.getElementById('gamePlayBody');
+  body.innerHTML='';
+  goTo('screen-gameplay');
+  refreshMarksBadge();
+  if(i===0) startCatchGame(body,i);
+  else if(i===1) startMemoryGame(body,i);
+  else if(i===2) startBuilderGame(body,i);
+  else if(i===3) startSpeedGame(body,i);
+  else startTFQuiz(body,i);
+}
+function finishGame(i, points){
+  state.game.scores[i]=points;
+  state.game.done[i]=true;
+  refreshMarksBadge();
+}
+
+/* ---------- GAME 1: Letter Catch ---------- */
+function startCatchGame(body,gi){
+  let round=0, score=0;
+  const rounds=CATCH_LETTERS.length;
+  body.innerHTML=`<div class="catchbox" id="catchBox"><div class="catch-target" id="catchTarget"></div></div>`;
+  const box=document.getElementById('catchBox');
+  function playRound(){
+    document.getElementById('gamePlayRound').textContent=`റൗണ്ട് ${round+1}/${rounds} · സ്കോർ ${score}`;
+    const target=CATCH_LETTERS[round];
+    document.getElementById('catchTarget').innerHTML=`ഇത് കണ്ടെത്തൂ: <b>${target}</b>`;
+    box.querySelectorAll('.bubble').forEach(b=>b.remove());
+    let caught=false;
+    let spawnCount=0;
+    const spawnMax=9;
+    const spawner=setInterval(()=>{
+      if(caught || spawnCount>=spawnMax){ clearInterval(spawner); currentGameIntervals=currentGameIntervals.filter(x=>x!==spawner); return; }
+      spawnCount++;
+      const letter = (Math.random()<0.4) ? target : CATCH_POOL[Math.floor(Math.random()*CATCH_POOL.length)];
+      const bub=document.createElement('div');
+      bub.className='bubble'; bub.textContent=letter; bub.dataset.letter=letter;
+      const bw=box.clientWidth;
+      bub.style.left=Math.max(8,Math.random()*(bw-64))+'px';
+      bub.style.setProperty('--drift',((Math.random()-.5)*80)+'px');
+      const dur=3.2+Math.random()*1.2;
+      bub.style.animationDuration=dur+'s';
+      bub.onclick=(ev)=>{
+        if(caught) return;
+        if(letter===target){
+          caught=true; score+=20; playSound('correct');
+          const r=bub.getBoundingClientRect(); popPoints(r.left,r.top,'+20','#3CB878');
+          bub.style.background='#3CB878'; bub.style.transform='scale(1.3)';
+          setTimeout(()=>{ box.querySelectorAll('.bubble').forEach(b=>b.remove()); clearInterval(spawner); nextRound(); },350);
+        } else {
+          playSound('wrong'); bub.classList.add('shake');
+          setTimeout(()=>bub.classList.remove('shake'),400);
+        }
+      };
+      bub.addEventListener('animationend',()=>{ if(bub.parentNode) bub.remove(); });
+      box.appendChild(bub);
+    },650);
+    currentGameIntervals.push(spawner);
+    const roundTimeout=setTimeout(()=>{
+      if(!caught){ clearInterval(spawner); nextRound(); }
+    },7200);
+    currentGameIntervals.push(roundTimeout);
+  }
+  function nextRound(){
+    round++;
+    if(round>=rounds){ endCatch(); return; }
+    playRound();
+  }
+  function endCatch(){
+    finishGame(gi,score);
+    burstConfetti(60); playSound('win');
+    body.innerHTML=gameFinishHTML(score,100);
+    document.getElementById('gamePlayRound').textContent='പൂർത്തിയായി!';
+  }
+  playRound();
+}
+
+/* ---------- GAME 2: Memory Match ---------- */
+function startMemoryGame(body,gi){
+  const pairs=MEMORY_PAIRS.flatMap(p=>[{...p,key:p.word},{...p,key:p.word}]);
+  for(let i=pairs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pairs[i],pairs[j]]=[pairs[j],pairs[i]]; }
+  body.innerHTML=`<div class="memgrid" id="memGrid"></div>`;
+  const grid=document.getElementById('memGrid');
+  let flipped=[], matched=0, moves=0, lock=false;
+  pairs.forEach((p,idx)=>{
+    const c=document.createElement('div'); c.className='memcard';
+    c.innerHTML=`<div class="face back">🦜</div><div class="face front">${p.emoji}<div style="font-size:11px">${p.word}</div></div>`;
+    c.onclick=()=>{
+      if(lock||c.classList.contains('flipped')||c.classList.contains('matched')) return;
+      c.classList.add('flipped'); playSound('pop');
+      flipped.push({c,key:p.key});
+      if(flipped.length===2){
+        moves++;
+        document.getElementById('gamePlayRound').textContent=`നീക്കങ്ങൾ: ${moves}`;
+        lock=true;
+        if(flipped[0].key===flipped[1].key){
+          flipped.forEach(f=>f.c.classList.add('matched'));
+          matched++; playSound('correct'); flipped=[]; lock=false;
+          if(matched===MEMORY_PAIRS.length){
+            const score=Math.max(40,100-(moves-6)*5);
+            setTimeout(()=>{ finishGame(gi,score); burstConfetti(60); playSound('win');
+              body.innerHTML=gameFinishHTML(score,100)+`<p style="text-align:center;font-family:Fredoka;color:#243759">നീക്കങ്ങൾ: ${moves}</p>`;
+              document.getElementById('gamePlayRound').textContent='പൂർത്തിയായി!';
+            },400);
+          }
+        } else {
+          playSound('wrong');
+          setTimeout(()=>{ flipped.forEach(f=>f.c.classList.remove('flipped')); flipped=[]; lock=false; },700);
+        }
+      }
+    };
+    grid.appendChild(c);
+  });
+  document.getElementById('gamePlayRound').textContent='നീക്കങ്ങൾ: 0';
+}
+
+/* ---------- GAME 3: Word Builder ---------- */
+function startBuilderGame(body,gi){
+  let round=0, score=0;
+  function playRound(){
+    document.getElementById('gamePlayRound').textContent=`റൗണ്ട് ${round+1}/${BUILD_WORDS.length} · സ്കോർ ${score}`;
+    const w=BUILD_WORDS[round];
+    const shuffled=[...w.tiles].map((t,i)=>({t,i})).sort(()=>Math.random()-.5);
+    body.innerHTML=`<div class="buildbox">
+      <div class="emoji">${w.emoji}</div>
+      <div class="slots" id="slots"></div>
+      <div class="tilepool" id="pool"></div>
+    </div>`;
+    const slotsEl=document.getElementById('slots');
+    const poolEl=document.getElementById('pool');
+    w.tiles.forEach(()=>{ const s=document.createElement('div'); s.className='slot'; slotsEl.appendChild(s); });
+    let nextIdx=0;
+    shuffled.forEach(item=>{
+      const btn=document.createElement('button'); btn.className='tile'; btn.textContent=item.t;
+      btn.onclick=()=>{
+        if(btn.classList.contains('used')) return;
+        if(item.t===w.tiles[nextIdx]){
+          slotsEl.children[nextIdx].textContent=item.t;
+          slotsEl.children[nextIdx].classList.add('filled');
+          btn.classList.add('used'); playSound('pop'); nextIdx++;
+          if(nextIdx===w.tiles.length){
+            score+=20; playSound('correct'); burstConfetti(25);
+            const rect=btn.getBoundingClientRect(); popPoints(rect.left,rect.top,'+20','#3CB878');
+            setTimeout(()=>{ round++; if(round>=BUILD_WORDS.length){ endBuild(); } else { playRound(); } },700);
+          }
+        } else {
+          btn.classList.add('shake'); playSound('wrong');
+          setTimeout(()=>btn.classList.remove('shake'),400);
+        }
+      };
+      poolEl.appendChild(btn);
+    });
+  }
+  function endBuild(){
+    finishGame(gi,score); burstConfetti(60); playSound('win');
+    document.getElementById('gamePlayBody').innerHTML=gameFinishHTML(score,100);
+    document.getElementById('gamePlayRound').textContent='പൂർത്തിയായി!';
+  }
+  playRound();
+}
+
+/* ---------- GAME 4: Speed Sentence ---------- */
+function startSpeedGame(body,gi){
+  let idx=0, score=0;
+  function playQ(){
+    document.getElementById('gamePlayRound').textContent=`ചോദ്യം ${idx+1}/${SPEED_SENTENCES.length} · സ്കോർ ${score}`;
+    body.innerHTML=`<div class="timerbar"><i id="tbar"></i></div><div id="speedQ"></div>`;
+    const qWrap=document.getElementById('speedQ');
+    let timeLeft=8, answered=false;
+    const bar=document.getElementById('tbar');
+    bar.style.transition='width 8s linear'; requestAnimationFrame(()=>{ bar.style.width='0%'; });
+    renderMCQ(qWrap, SPEED_SENTENCES[idx], (correct)=>{
+      if(answered) return; answered=true; clearInterval(currentGameTimer);
+      if(correct){ const bonus=Math.round(10*(timeLeft/8)); score+=10+bonus; }
+      nextQ();
+    });
+    currentGameTimer=setInterval(()=>{
+      timeLeft-=0.2;
+      if(timeLeft<=0 && !answered){
+        answered=true; clearInterval(currentGameTimer); playSound('wrong');
+        qWrap.querySelectorAll('.mcq-chip').forEach(c=>c.disabled=true);
+        nextQ();
+      }
+    },200);
+  }
+  function nextQ(){
+    idx++;
+    if(idx>=SPEED_SENTENCES.length){ endSpeed(); } else { setTimeout(playQ,500); }
+  }
+  function endSpeed(){
+    finishGame(gi,score); burstConfetti(60); playSound('win');
+    document.getElementById('gamePlayBody').innerHTML=gameFinishHTML(score,100);
+    document.getElementById('gamePlayRound').textContent='പൂർത്തിയായി!';
+  }
+  playQ();
+}
+
+/* ---------- GAME 5: Parrot TF Quiz ---------- */
+function startTFQuiz(body,gi){
+  let idx=0, score=0;
+  function playQ(){
+    document.getElementById('gamePlayRound').textContent=`ചോദ്യം ${idx+1}/${TF_QUIZ.length} · സ്കോർ ${score}`;
+    const q=TF_QUIZ[idx];
+    body.innerHTML=`
+      <svg class="parrot-react" id="reactParrot" viewBox="0 0 100 100">
+        <ellipse cx="50" cy="58" rx="26" ry="30" fill="#3CB878"/>
+        <ellipse cx="50" cy="58" rx="14" ry="22" fill="#FFB627"/>
+        <circle cx="50" cy="30" r="18" fill="#3CB878"/>
+        <circle cx="43" cy="27" r="4.5" fill="#1B2A4A"/>
+        <circle cx="44.5" cy="25.5" r="1.4" fill="#fff"/>
+        <path d="M50 30 Q66 30 62 38 Q54 40 50 34 Z" fill="#FF6B5B"/>
+      </svg>
+      <div class="qcard"><div class="mcq-question">${q.q}</div>
+      <div class="tfrow"><button class="tfbtn t" id="tfT">ശരി ✅</button><button class="tfbtn f" id="tfF">തെറ്റ് ❌</button></div></div>`;
+    const parrot=document.getElementById('reactParrot');
+    function answer(val,btn){
+      document.getElementById('tfT').disabled=true; document.getElementById('tfF').disabled=true;
+      const correct=(val===q.answer);
+      if(correct){ score+=20; playSound('correct'); parrot.style.transform='scale(1.25) rotate(-6deg)'; btn.style.outline='4px solid #3CB878';}
+      else { playSound('wrong'); parrot.style.transform='scale(.9) rotate(6deg)'; btn.style.outline='4px solid #FF6B5B'; }
+      setTimeout(()=>{ idx++; if(idx>=TF_QUIZ.length) endTF(); else playQ(); },800);
+    }
+    document.getElementById('tfT').onclick=(e)=>answer(true,e.target);
+    document.getElementById('tfF').onclick=(e)=>answer(false,e.target);
+  }
+  function endTF(){
+    finishGame(gi,score); burstConfetti(90); playSound('win');
+    const grand = actTotal()+' / 20 മാർക്ക്  +  '+gameTotal()+' പോയിന്റ്';
+    document.getElementById('gamePlayBody').innerHTML = gameFinishHTML(score,100) +
+      `<div class="finalcard"><div>🎉 ആകെ നേട്ടം 🎉</div><h2>നീ ഒരു തത്തമ്മ താരം!</h2><div class="score">${grand}</div></div>`;
+    document.getElementById('gamePlayRound').textContent='എല്ലാം പൂർത്തിയായി!';
+  }
+  playQ();
+}
+
+function gameFinishHTML(score,max){
+  const pct=Math.round(score/max*100);
+  let msg = pct>=80 ? '🌟 അസാധ്യം! സൂപ്പർ താരം!' : pct>=50 ? '👏 കൊള്ളാം! നന്നായി ചെയ്തു!' : '💪 കുഴപ്പമില്ല, ഒന്നുകൂടി ശ്രമിക്കൂ!';
+  return `<div class="finalcard"><div style="font-size:40px;">🏆</div><h2>${msg}</h2><div class="score">${score} pts</div></div>`;
+}
+
+/* init */
+updateHubProgress();
+</script>
+</body>
+</html>
