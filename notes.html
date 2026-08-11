@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>കുറിപ്പുകൾ — അക്ഷരം</title>
+<title>Malayalam Notes Class 4, 6, 9 | അക്ഷരം കുറിപ്പുകൾ</title>
+<meta name="description" content="Download free Malayalam class notes PDF — Class 4 Malayalam note, Class 6 Malayalam note, Class 9 Malayalam note. മലയാളം കുറിപ്പുകൾ." />
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
@@ -125,7 +126,7 @@
 
   function renderCards(container, files){
     if (!files.length){
-      container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+      container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല.</div>';
       return;
     }
     container.innerHTML = '';
@@ -164,7 +165,7 @@
         renderCards(container, files);
       })
       .catch(function(){
-        container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല. <a href="upload.html">അപ്‌ലോഡ് ചെയ്യാൻ ഇവിടെ ഞെക്കുക</a>.</div>';
+        container.innerHTML = '<div class="empty-state">ഈ ക്ലാസിന് ഇതുവരെ കുറിപ്പുകൾ ചേർത്തിട്ടില്ല.</div>';
       });
   }
 
