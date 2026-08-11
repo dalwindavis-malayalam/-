@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /upload.html
+
+Sitemap: https://dalwindavis-malayalam.github.io/-/sitemap.xml
