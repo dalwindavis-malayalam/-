@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>തുടക്കക്കാർക്ക് — അക്ഷരം</title>
+<title>Basic Malayalam for Beginners | അക്ഷരം</title>
+<meta name="description" content="Learn basic Malayalam from scratch — free notes and games for children who are new to Malayalam. തുടക്കക്കാർക്കുള്ള മലയാളം." />
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
@@ -67,6 +68,12 @@
   .loading{ text-align:center; color:rgba(255,255,255,0.35); font-size:0.85rem; padding:40px 0; }
 
   .site-footer{ position:relative; z-index:1; text-align:center; color:rgba(255,255,255,0.3); font-size:0.75rem; padding:0 24px 40px; }
+
+  .game-modal{ position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:9998; display:none; flex-direction:column; }
+  .game-modal.open{ display:flex; }
+  .game-modal-bar{ display:flex; justify-content:flex-end; padding:14px 18px; }
+  .game-modal-close{ background:rgba(255,255,255,0.1); color:#fff; border:none; border-radius:999px; width:40px; height:40px; font-size:1.1rem; cursor:pointer; }
+  .game-modal iframe{ flex:1; width:100%; border:none; background:#000; }
 </style>
 </head>
 <body>
@@ -112,6 +119,13 @@
     </div>
   </div>
 </section>
+
+<div class="game-modal" id="game-modal">
+  <div class="game-modal-bar">
+    <button class="game-modal-close" onclick="closeGameModal()" aria-label="അടയ്ക്കുക">✕</button>
+  </div>
+  <iframe id="game-modal-frame" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock" allow="autoplay"></iframe>
+</div>
 
 <footer class="site-footer">© 2026 അക്ഷരം. തുടക്കക്കാർക്കുള്ള പുതിയ ഉള്ളടക്കം ഉടൻ ചേർക്കും.</footer>
 
@@ -167,11 +181,11 @@
         '<div class="item-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M7 11v4M5 13h4M15 13h.01M18 11h.01"/></svg></div>' +
         '<div class="item-title">' + humanize(f.name) + '</div>' +
         '<div class="item-desc">തുടക്കക്കാർക്കുള്ള മലയാളം ഗെയിം</div>' +
-        '<a class="item-action glass pill" href="' + actionUrl + '" target="_blank" rel="noopener">' +
+        '<button type="button" class="item-action glass pill" ' + (playable ? 'onclick="openGameModal(\'' + actionUrl.replace(/'/g, "\\'") + '\')"' : ' disabled style="opacity:0.4;cursor:not-allowed;"') + '>' +
           (playable
             ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> കളിക്കുക'
-            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> ഡൗൺലോഡ്') +
-        '</a>';
+            : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> ലഭ്യമല്ല') +
+        '</button>';
       container.appendChild(card);
       requestAnimationFrame(function(){ setTimeout(function(){ card.classList.add('visible'); }, 30); });
     });
@@ -199,6 +213,31 @@
       btn.classList.add('active');
       document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
     });
+  });
+
+  // ---- Game modal (play in-page, no direct link/download) ----
+  function openGameModal(url){
+    var modal = document.getElementById('game-modal');
+    var frame = document.getElementById('game-modal-frame');
+    frame.src = url;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeGameModal(){
+    var modal = document.getElementById('game-modal');
+    var frame = document.getElementById('game-modal-frame');
+    modal.classList.remove('open');
+    frame.src = '';
+    document.body.style.overflow = '';
+  }
+
+  // ---- Basic copy/inspect deterrents ----
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  document.addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'F12') e.preventDefault();
+    if (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'J' || k === 'C')) e.preventDefault();
+    if (e.ctrlKey && (k === 'u' || k === 'U' || k === 's' || k === 'S')) e.preventDefault();
   });
 </script>
 </body>
