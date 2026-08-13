@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="google-site-verification" content="J7oaE4TJnnKzPgU9nK-qjPwfgm-8q5-0sf_cBbXkPds" />
 <title>അക്ഷരം | Malayalam Learning for Kids — Class 4, 6, 9 Notes & Games</title>
 <meta name="description" content="Free basic Malayalam notes and games for Class 4, Class 6, Class 9 kids. മലയാളം കുറിപ്പുകൾ, ഗെയിംസ് — Class 4 Malayalam note, Class 6 Malayalam note, Class 9 Malayalam note." />
 <meta property="og:title" content="അക്ഷരം — Malayalam Learning for Kids" />
@@ -95,28 +96,34 @@
   }
 
   /* ================= WELCOME SECTION ================= */
-  .welcome{ position:relative; padding:56px 24px 40px; background:#000; overflow:hidden; }
-  .welcome-glow{ position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 25% 30%, rgba(126,232,250,0.08) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(255,157,112,0.06) 0%, transparent 45%); }
+  .welcome{ position:relative; padding:64px 24px 48px; background:#F7F9FC; overflow:hidden; }
+  .welcome-glow{ position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(circle at 18% 25%, rgba(96,177,255,0.16) 0%, transparent 45%),
+                radial-gradient(circle at 85% 70%, rgba(126,232,250,0.14) 0%, transparent 45%);
+    filter: blur(20px);
+  }
   .welcome-grid{ position:relative; max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:40px; align-items:center; }
   @media (min-width:960px){ .welcome-grid{ grid-template-columns:1.1fr 0.9fr; gap:56px; } }
 
-  .welcome-label{ color:rgba(255,255,255,0.4); font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; margin-bottom:16px; }
-  .welcome-copy{ font-size:1.05rem; line-height:1.9; color:rgba(255,255,255,0.75); max-width:560px; }
+  .welcome-label{ color:rgba(20,30,50,0.45); font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; margin-bottom:16px; }
+  .welcome-copy{ font-size:1.05rem; line-height:1.9; color:rgba(20,30,50,0.78); max-width:560px; }
   .welcome-sign{ margin-top:28px; display:flex; align-items:center; gap:14px; }
-  .welcome-sign .credit-line{ width:36px; height:2px; background:rgba(255,255,255,0.4); margin:0; }
-  .welcome-sign .sign-text .credit-name{ font-size:1.05rem; }
-  .welcome-sign .sign-text .credit-role{ font-size:0.72rem; text-align:left; }
+  .welcome-sign .credit-line{ width:36px; height:2px; background:rgba(20,30,50,0.3); margin:0; }
+  .welcome-sign .sign-text .credit-name{ font-size:1.05rem; color:#111827; }
+  .welcome-sign .sign-text .credit-role{ font-size:0.72rem; text-align:left; color:rgba(20,30,50,0.5); }
 
   .welcome-robot-wrap{ position:relative; display:flex; align-items:center; justify-content:center; min-height:320px; }
-  .robot-glow-orb{ position:absolute; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(126,232,250,0.15), transparent 70%); filter:blur(10px); }
-  .welcome-robot{ position:relative; width:260px; z-index:2; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); border-radius:20px; overflow:hidden; will-change:transform; }
-  .welcome-robot video{ width:100%; height:100%; object-fit:cover; display:block; }
-  @media (min-width:640px){ .welcome-robot{ width:340px; } }
+  .robot-glow-orb{ position:absolute; width:380px; height:380px; border-radius:50%; background:radial-gradient(circle, rgba(96,177,255,0.22), transparent 70%); filter:blur(30px); }
+  .welcome-robot{ position:relative; width:280px; z-index:2; will-change:transform; mix-blend-mode:multiply; }
+  .welcome-robot video{ width:100%; height:auto; display:block; filter:brightness(1.03) contrast(1.04); }
+  @media (min-width:640px){ .welcome-robot{ width:380px; } }
 
   .w-float-badge{
     position:absolute; z-index:3; padding:10px 16px; border-radius:999px;
-    display:flex; align-items:center; gap:8px; font-size:0.78rem; font-weight:600; color:#fff;
-    white-space:nowrap;
+    display:flex; align-items:center; gap:8px; font-size:0.78rem; font-weight:700; color:#1f2937;
+    white-space:nowrap; background:linear-gradient(135deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
+    border:1px solid rgba(255,255,255,0.8); backdrop-filter:blur(16px);
+    box-shadow: 0 10px 24px -6px rgba(30,60,120,0.18), inset 0 1.5px 2px rgba(255,255,255,0.9);
   }
   .w-badge-1{ top:6%; right:2%; animation: wfloat1 5s ease-in-out infinite; }
   .w-badge-2{ bottom:12%; left:0%; animation: wfloat2 5.6s ease-in-out infinite; }
@@ -293,9 +300,9 @@
         </video>
       </div>
 
-      <div class="w-float-badge glass pill w-badge-1">🎮 കളികൾ</div>
-      <div class="w-float-badge glass pill w-badge-2">📘 കുറിപ്പുകൾ</div>
-      <div class="w-float-badge glass pill w-badge-3">💡 ചിന്തകൾ അറിവിലേക്ക്</div>
+      <div class="w-float-badge w-badge-1">🎮 കളികൾ</div>
+      <div class="w-float-badge w-badge-2">📘 കുറിപ്പുകൾ</div>
+      <div class="w-float-badge w-badge-3">💡 ചിന്തകൾ അറിവിലേക്ക്</div>
     </div>
   </div>
 </section>
