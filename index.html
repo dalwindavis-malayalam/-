@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>അക്ഷരം — മലയാളം ഗെയിംസ്, ക്വിസ്, കുറിപ്പുകൾ</title>
+<title>അക്ഷരം | Malayalam Learning for Kids — Class 4, 6, 9 Notes & Games</title>
+<meta name="description" content="Free basic Malayalam notes and games for Class 4, Class 6, Class 9 kids. മലയാളം കുറിപ്പുകൾ, ഗെയിംസ് — Class 4 Malayalam note, Class 6 Malayalam note, Class 9 Malayalam note." />
+<meta property="og:title" content="അക്ഷരം — Malayalam Learning for Kids" />
+<meta property="og:description" content="Free basic Malayalam notes and games for Class 4, 6, 9 and beginners." />
+<meta property="og:type" content="website" />
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
@@ -60,12 +64,12 @@
   }
 
   /* ---- reveal animation ---- */
-  .reveal{ opacity:0; transform:translateY(40px); transition:opacity .8s ease, transform .8s ease; }
-  .reveal.visible{ opacity:1; transform:translateY(0); }
-  .reveal-left{ opacity:0; transform:translateX(-40px); transition:opacity .8s ease, transform .8s ease; }
-  .reveal-left.visible{ opacity:1; transform:translateX(0); }
-  .reveal-right{ opacity:0; transform:translateX(40px); transition:opacity .8s ease, transform .8s ease; }
-  .reveal-right.visible{ opacity:1; transform:translateX(0); }
+  .reveal{ opacity:0; transform: perspective(1000px) rotateX(28deg) translateY(50px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); transform-origin: center bottom; }
+  .reveal.visible{ opacity:1; transform: perspective(1000px) rotateX(0deg) translateY(0); }
+  .reveal-left{ opacity:0; transform: perspective(1000px) rotateY(-24deg) translateX(-40px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+  .reveal-left.visible{ opacity:1; transform: perspective(1000px) rotateY(0deg) translateX(0); }
+  .reveal-right{ opacity:0; transform: perspective(1000px) rotateY(24deg) translateX(40px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+  .reveal-right.visible{ opacity:1; transform: perspective(1000px) rotateY(0deg) translateX(0); }
   @media (prefers-reduced-motion: reduce){
     .reveal,.reveal-left,.reveal-right{ transition:none; opacity:1; transform:none; }
   }
@@ -90,6 +94,37 @@
     .btn-ghost{ display:block; }
   }
 
+  /* ================= WELCOME SECTION ================= */
+  .welcome{ position:relative; padding:56px 24px 40px; background:#000; overflow:hidden; }
+  .welcome-glow{ position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 25% 30%, rgba(126,232,250,0.08) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(255,157,112,0.06) 0%, transparent 45%); }
+  .welcome-grid{ position:relative; max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:40px; align-items:center; }
+  @media (min-width:960px){ .welcome-grid{ grid-template-columns:1.1fr 0.9fr; gap:56px; } }
+
+  .welcome-label{ color:rgba(255,255,255,0.4); font-size:0.78rem; letter-spacing:0.25em; text-transform:uppercase; margin-bottom:16px; }
+  .welcome-copy{ font-size:1.05rem; line-height:1.9; color:rgba(255,255,255,0.75); max-width:560px; }
+  .welcome-sign{ margin-top:28px; display:flex; align-items:center; gap:14px; }
+  .welcome-sign .credit-line{ width:36px; height:2px; background:rgba(255,255,255,0.4); margin:0; }
+  .welcome-sign .sign-text .credit-name{ font-size:1.05rem; }
+  .welcome-sign .sign-text .credit-role{ font-size:0.72rem; text-align:left; }
+
+  .welcome-robot-wrap{ position:relative; display:flex; align-items:center; justify-content:center; min-height:320px; }
+  .robot-glow-orb{ position:absolute; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(126,232,250,0.15), transparent 70%); filter:blur(10px); }
+  .welcome-robot{ position:relative; width:260px; z-index:2; filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5)); border-radius:20px; overflow:hidden; will-change:transform; }
+  .welcome-robot video{ width:100%; height:100%; object-fit:cover; display:block; }
+  @media (min-width:640px){ .welcome-robot{ width:340px; } }
+
+  .w-float-badge{
+    position:absolute; z-index:3; padding:10px 16px; border-radius:999px;
+    display:flex; align-items:center; gap:8px; font-size:0.78rem; font-weight:600; color:#fff;
+    white-space:nowrap;
+  }
+  .w-badge-1{ top:6%; right:2%; animation: wfloat1 5s ease-in-out infinite; }
+  .w-badge-2{ bottom:12%; left:0%; animation: wfloat2 5.6s ease-in-out infinite; }
+  .w-badge-3{ bottom:0%; right:8%; animation: wfloat3 4.8s ease-in-out infinite; }
+  @keyframes wfloat1{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+  @keyframes wfloat2{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(8px); } }
+  @keyframes wfloat3{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
+
   /* ================= HERO ================= */
   .hero{ min-height:100vh; overflow:hidden; position:relative; display:flex; flex-direction:column; background:#050505; }
   .hero-video{
@@ -107,6 +142,21 @@
     font-size:clamp(2.6rem, 10vw, 6.5rem);
     line-height:1.05; letter-spacing:-0.02em; margin-bottom:2rem;
   }
+  .hero-overline{ color:rgba(255,255,255,0.5); font-size:0.8rem; letter-spacing:0.25em; text-transform:uppercase; margin-bottom:1.2rem; }
+  .hero-heading-mega{
+    font-family: var(--font-serif); font-style:italic;
+    font-size:clamp(2.8rem, 13vw, 8rem);
+    line-height:1.02; letter-spacing:-0.02em; margin-bottom:1.8rem;
+  }
+  .hero-credit{ display:flex; flex-direction:column; align-items:center; gap:6px; margin-bottom:2.4rem; }
+  .credit-line{ width:60px; height:2px; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); margin-bottom:10px; }
+  .credit-name{ font-size:1.15rem; font-weight:600; letter-spacing:0.02em; }
+  .credit-role{ font-size:0.78rem; color:rgba(255,255,255,0.5); letter-spacing:0.15em; text-transform:uppercase; }
+  .scroll-cue{ display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:999px; color:rgba(255,255,255,0.6); animation: cueBounce 1.8s ease-in-out infinite; }
+  @keyframes cueBounce{ 0%,100%{ transform:translateY(0); opacity:0.5; } 50%{ transform:translateY(8px); opacity:1; } }
+
+  .ai-robot{ position:absolute; top:38%; left:80%; width:130px; height:130px; z-index:8; pointer-events:none; filter:drop-shadow(0 12px 28px rgba(0,0,0,0.5)); }
+  @media (max-width:768px){ .ai-robot{ width:88px; height:88px; top:20%; left:80%; } }
   .hero-form{ max-width:480px; width:100%; margin:0 auto 1.5rem; }
   .email-pill{
     display:flex; align-items:center; gap:12px; padding:8px 8px 8px 24px; border-radius:999px;
@@ -176,7 +226,7 @@
   .philo-heading em{ color:rgba(255,255,255,0.4); }
   .philo-grid{ max-width:960px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:32px; align-items:center; }
   .philo-video{ border-radius:24px; overflow:hidden; aspect-ratio:4/3; background:linear-gradient(160deg,#1a1a1a,#000); }
-  .philo-video video{ width:100%; height:100%; object-fit:cover; }
+  .philo-video video{ width:100%; height:100%; object-fit:cover; transform: translateY(var(--parallax-offset, 0px)); }
   .philo-text{ display:flex; flex-direction:column; gap:2rem; }
   .philo-text .label{ color:rgba(255,255,255,0.4); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:1rem; }
   .philo-text .body{ color:rgba(255,255,255,0.7); font-size:1rem; line-height:1.7; }
@@ -190,7 +240,9 @@
   .services-header h2{ font-size:clamp(1.8rem, 5vw, 3rem); letter-spacing:-0.02em; }
   .services-header span{ color:rgba(255,255,255,0.4); font-size:0.9rem; display:none; }
   .services-grid{ max-width:960px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:24px; }
-  .card{ border-radius:24px; overflow:hidden; }
+  .card{ border-radius:24px; overflow:hidden; transform-style:preserve-3d; will-change:transform; transition:transform .15s ease-out, box-shadow .3s; }
+  .featured-frame{ transform-style:preserve-3d; will-change:transform; transition:transform .15s ease-out; }
+  .philo-video{ transform-style:preserve-3d; will-change:transform; transition:transform .15s ease-out; }
   .card-media{ position:relative; aspect-ratio:16/9; overflow:hidden; background:linear-gradient(160deg,#1a1a1a,#000); }
   .card-media video{ width:100%; height:100%; object-fit:cover; transition:transform .7s; }
   .card:hover .card-media video{ transform:scale(1.05); }
@@ -216,6 +268,38 @@
 <canvas id="bloom-canvas" style="position:fixed; inset:0; width:100%; height:100%; z-index:9999; pointer-events:none;"></canvas>
 
 <!-- ================= HERO ================= -->
+<section class="welcome">
+  <div class="welcome-glow"></div>
+  <div class="welcome-grid">
+    <div class="welcome-text reveal">
+      <p class="welcome-label">സ്വാഗതം</p>
+      <p class="welcome-copy">
+        ഭാഷ ഒരു നദിയാണ് — തലമുറകളിലൂടെ ഒഴുകി, അറിവിന്റെ വേരുകളെ നനച്ച്, മനസ്സുകളെ കൂട്ടിയിണക്കുന്ന ഒന്ന്. ഇന്ന്, കൃത്രിമബുദ്ധിയുടെ (AI) കൈത്താങ്ങോടെ, ഈ അമൂല്യമായ മലയാളഭാഷയെ പുതുതലമുറയ്ക്ക് സ്നേഹപൂർവ്വം പകർന്നു നൽകുകയാണ് ഞങ്ങളുടെ സ്വപ്നം. കളിയിലൂടെയും ചിരിയിലൂടെയും, ഓരോ കുഞ്ഞു മനസ്സിനെയും ചിന്തയിലേക്കും അറിവിലേക്കും കൈപിടിച്ചു നടത്തുക — അതാണ് ഈ യാത്രയുടെ ലക്ഷ്യം.
+      </p>
+      <div class="welcome-sign">
+        <div class="credit-line"></div>
+        <div class="sign-text">
+          <p class="credit-name">ഡാൽവിൻ ഡേവിസ്</p>
+          <p class="credit-role">സ്ഥാപകൻ, അക്ഷരം</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="welcome-robot-wrap">
+      <div class="robot-glow-orb"></div>
+      <div class="welcome-robot" id="welcome-robot">
+        <video autoplay loop muted playsinline>
+          <source src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/hero_robo_video.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="w-float-badge glass pill w-badge-1">🎮 കളികൾ</div>
+      <div class="w-float-badge glass pill w-badge-2">📘 കുറിപ്പുകൾ</div>
+      <div class="w-float-badge glass pill w-badge-3">💡 ചിന്തകൾ അറിവിലേക്ക്</div>
+    </div>
+  </div>
+</section>
+
 <section class="hero">
   <video class="hero-video" id="hero-video" muted autoplay playsinline preload="auto">
     <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_074625_a81f018a-956b-43fb-9aee-4d1508e30e6a.mp4" type="video/mp4">
@@ -240,22 +324,35 @@
     </nav>
   </div>
 
+  <div class="ai-robot" id="ai-robot">
+    <svg viewBox="0 0 200 200" width="100%" height="100%">
+      <line x1="100" y1="18" x2="100" y2="44" stroke="rgba(255,255,255,0.55)" stroke-width="3"/>
+      <circle cx="100" cy="14" r="7" fill="#7ee8fa"/>
+      <circle cx="40" cy="92" r="10" fill="rgba(255,255,255,0.14)"/>
+      <circle cx="160" cy="92" r="10" fill="rgba(255,255,255,0.14)"/>
+      <rect x="45" y="45" width="110" height="90" rx="28" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="82" cy="90" r="12" fill="#7ee8fa"/>
+      <circle cx="118" cy="90" r="12" fill="#7ee8fa"/>
+      <circle cx="82" cy="92" r="4" fill="#08202a"/>
+      <circle cx="118" cy="92" r="4" fill="#08202a"/>
+      <rect x="80" y="112" width="40" height="6" rx="3" fill="rgba(255,255,255,0.5)"/>
+      <rect x="60" y="140" width="80" height="50" rx="18" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+    </svg>
+  </div>
+
   <div class="hero-content">
-    <h1 class="hero-heading">അറിയാം <em class="serif">എല്ലാം.</em></h1>
+    <p class="hero-overline">മലയാളം AI ലോകത്തിലേക്ക് സ്വാഗതം</p>
+    <h1 class="hero-heading-mega">ഇമ്മിണി വലിയ <em class="serif">മലയാളം</em></h1>
 
-    <form class="hero-form" id="email-form">
-      <div class="email-pill glass pill">
-        <input id="email-input" type="email" required placeholder="ഇമെയിൽ നൽകുക" />
-        <button type="submit" class="email-submit" aria-label="സബ്മിറ്റ് ചെയ്യുക">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-      <p class="email-success" id="email-success">നന്ദി! പുതിയ അപ്‌ഡേറ്റുകൾ നിങ്ങളുടെ ഇമെയിലിൽ എത്തും.</p>
-    </form>
+    <div class="hero-credit">
+      <div class="credit-line"></div>
+      <p class="credit-name">ഡാൽവിൻ ഡേവിസ്</p>
+      <p class="credit-role">മലയാള വിഭാഗം</p>
+    </div>
 
-    <p class="hero-subtitle">പുതിയ മലയാളം ഗെയിമുകൾ, ക്വിസുകൾ, കുറിപ്പുകൾ എന്നിവയെക്കുറിച്ച് അറിയാൻ ഞങ്ങളുടെ ന്യൂസ്‌ലെറ്റർ സബ്സ്ക്രൈബ് ചെയ്യൂ. രസകരമായ അപ്‌ഡേറ്റുകൾ ഒന്നും നഷ്ടപ്പെടുത്തരുത്.</p>
-
-    <a href="#about" class="btn-manifesto glass pill">ഞങ്ങളെ അറിയാം</a>
+    <a href="#about" class="scroll-cue glass pill" aria-label="താഴേക്ക് സ്ക്രോൾ ചെയ്യുക">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </a>
   </div>
 
   <div class="social-row">
@@ -530,6 +627,134 @@
         handleMove(e.touches[i].clientX, e.touches[i].clientY, false);
       }
     }, { passive: true });
+  })();
+  // ---- 3D tilt on hover/touch for cards ----
+  (function(){
+    var tiltEls = document.querySelectorAll('.card, .featured-frame, .philo-video');
+    tiltEls.forEach(function(el){
+      function handleTilt(clientX, clientY){
+        var rect = el.getBoundingClientRect();
+        var px = (clientX - rect.left) / rect.width;
+        var py = (clientY - rect.top) / rect.height;
+        var rotateY = (px - 0.5) * 14;
+        var rotateX = (0.5 - py) * 14;
+        el.style.transform = 'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.02,1.02,1.02)';
+      }
+      function resetTilt(){
+        el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+      }
+      el.addEventListener('mousemove', function(e){ handleTilt(e.clientX, e.clientY); });
+      el.addEventListener('mouseleave', resetTilt);
+      el.addEventListener('touchmove', function(e){
+        if (e.touches[0]) handleTilt(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      el.addEventListener('touchend', resetTilt);
+    });
+  })();
+
+  // ---- Scroll parallax for hero video and philosophy video ----
+  (function(){
+    var heroSection = document.querySelector('.hero');
+    var heroVid = document.getElementById('hero-video');
+    var philoVid = document.querySelector('.philo-video');
+    var ticking = false;
+
+    function updateParallax(){
+      var scrollY = window.scrollY || window.pageYOffset;
+
+      if (heroVid && heroSection){
+        var heroHeight = heroSection.offsetHeight;
+        if (scrollY < heroHeight * 1.2){
+          heroVid.style.transform = 'translateY(' + (scrollY * 0.35) + 'px) scale(' + (1 + scrollY * 0.0003) + ')';
+        }
+      }
+
+      if (philoVid){
+        var rect = philoVid.getBoundingClientRect();
+        var vh = window.innerHeight;
+        if (rect.top < vh && rect.bottom > 0){
+          var progress = (vh - rect.top) / (vh + rect.height);
+          var offset = (progress - 0.5) * 30;
+          philoVid.style.setProperty('--parallax-offset', offset + 'px');
+        }
+      }
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function(){
+      if (!ticking){
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    updateParallax();
+  })();
+  // ---- AI robot mascot follows the pointer ----
+  (function(){
+    var robot = document.getElementById('ai-robot');
+    var heroSection = document.querySelector('.hero');
+    if (!robot || !heroSection) return;
+    var targetX = 0, targetY = 0, curX = 0, curY = 0;
+    var startTime = performance.now();
+
+    function onPointerMove(e){
+      var rect = heroSection.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) / (rect.width / 2);
+      var dy = (e.clientY - cy) / (rect.height / 2);
+      targetX = Math.max(-1, Math.min(1, dx)) * 45;
+      targetY = Math.max(-1, Math.min(1, dy)) * 32;
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('touchmove', function(e){
+      if (e.touches[0]) onPointerMove(e.touches[0]);
+    }, { passive: true });
+
+    function animateRobot(now){
+      var t = (now - startTime) / 1000;
+      var bobY = Math.sin(t * 1.2) * 10;
+      var bobX = Math.sin(t * 0.7) * 4;
+      curX += (targetX - curX) * 0.06;
+      curY += (targetY - curY) * 0.06;
+      robot.style.transform = 'translate(' + (curX + bobX) + 'px, ' + (curY + bobY) + 'px)';
+      requestAnimationFrame(animateRobot);
+    }
+    requestAnimationFrame(animateRobot);
+  })();
+  // ---- Welcome robot follows the pointer ----
+  (function(){
+    var robot = document.getElementById('welcome-robot');
+    var wrap = document.querySelector('.welcome-robot-wrap');
+    if (!robot || !wrap) return;
+    var targetX = 0, targetY = 0, targetRot = 0;
+    var curX = 0, curY = 0, curRot = 0;
+
+    function onPointerMove(e){
+      var rect = wrap.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) / (rect.width / 2);
+      var dy = (e.clientY - cy) / (rect.height / 2);
+      targetX = Math.max(-1, Math.min(1, dx)) * 22;
+      targetY = Math.max(-1, Math.min(1, dy)) * 16;
+      targetRot = Math.max(-1, Math.min(1, dx)) * 6;
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('touchmove', function(e){
+      if (e.touches[0]) onPointerMove(e.touches[0]);
+    }, { passive: true });
+
+    function animateWelcomeRobot(){
+      curX += (targetX - curX) * 0.07;
+      curY += (targetY - curY) * 0.07;
+      curRot += (targetRot - curRot) * 0.07;
+      robot.style.transform = 'translate(' + curX + 'px, ' + curY + 'px) rotate(' + curRot + 'deg)';
+      requestAnimationFrame(animateWelcomeRobot);
+    }
+    requestAnimationFrame(animateWelcomeRobot);
   })();
 </script>
 </body>
