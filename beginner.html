@@ -75,8 +75,14 @@
   .game-modal-close{ background:rgba(255,255,255,0.1); color:#fff; border:none; border-radius:999px; width:40px; height:40px; font-size:1.1rem; cursor:pointer; }
   .game-modal iframe{ flex:1; width:100%; border:none; background:#000; }
 </style>
+<style>html{ visibility:hidden; }</style>
 </head>
 <body>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script>requireAuth('index.html');</script>
 <div class="bg-glow"></div>
 
 <div class="nav-wrap">
@@ -85,10 +91,13 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
       <span class="brand serif">അക്ഷരം</span>
     </div>
-    <a href="index.html" class="back-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      ഹോമിലേക്ക്
-    </a>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <a href="home.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        ഹോമിലേക്ക്
+      </a>
+      <button onclick="doLogout('index.html')" class="back-link" style="background:none;border:none;cursor:pointer;font-family:inherit;">ലോഗ്ഔട്ട്</button>
+    </div>
   </nav>
 </div>
 
@@ -181,7 +190,7 @@
         '<div class="item-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M7 11v4M5 13h4M15 13h.01M18 11h.01"/></svg></div>' +
         '<div class="item-title">' + humanize(f.name) + '</div>' +
         '<div class="item-desc">തുടക്കക്കാർക്കുള്ള മലയാളം ഗെയിം</div>' +
-        '<button type="button" class="item-action glass pill" ' + (playable ? 'onclick="openGameModal(\'' + actionUrl.replace(/'/g, "\\'") + '\')"' : ' disabled style="opacity:0.4;cursor:not-allowed;"') + '>' +
+        '<button type="button" class="item-action glass pill" ' + (playable ? 'onclick="openGameModal(\'' + actionUrl.replace(/'/g, "\\'") + '\', \'' + humanize(f.name).replace(/'/g, "\\'") + '\')"' : ' disabled style="opacity:0.4;cursor:not-allowed;"') + '>' +
           (playable
             ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> കളിക്കുക'
             : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> ലഭ്യമല്ല') +
@@ -216,12 +225,13 @@
   });
 
   // ---- Game modal (play in-page, no direct link/download) ----
-  function openGameModal(url){
+  function openGameModal(url, label){
     var modal = document.getElementById('game-modal');
     var frame = document.getElementById('game-modal-frame');
     frame.src = url;
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
+    logActivity('game', label || url);
   }
   function closeGameModal(){
     var modal = document.getElementById('game-modal');
