@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>അഡ്മിൻ — അക്ഷരം</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap');
+  :root{ --font-body:'Noto Sans Malayalam','Manjari','Meera',system-ui,sans-serif; --font-serif:'Instrument Serif','Manjari',serif; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ visibility:hidden; background:#000; }
+  body{ background:#000; font-family:var(--font-body); color:#fff; min-height:100vh; }
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+  .serif{ font-family:var(--font-serif); font-style:italic; }
+
+  .glass{ background: rgba(255,255,255,0.01); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border:none; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1); position:relative; overflow:hidden; }
+  .glass::before{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1.4px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 20%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.15) 80%, rgba(255,255,255,0.45) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none; }
+  .pill{ border-radius:999px; }
+
+  .nav-wrap{ padding:24px; }
+  .nav{ max-width:960px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-radius:999px; }
+  .nav-left{ display:flex; align-items:center; gap:8px; }
+  .brand{ font-size:1.1rem; font-weight:600; margin-left:8px; }
+  .nav-right a, .nav-right button{ font-size:0.85rem; color:rgba(255,255,255,0.7); background:none; border:none; margin-left:16px; }
+
+  .wrap{ max-width:960px; margin:0 auto; padding:20px 24px 80px; }
+  .page-title{ font-family:var(--font-serif); font-style:italic; font-size:clamp(2rem,7vw,3rem); margin-bottom:8px; }
+  .page-sub{ color:rgba(255,255,255,0.5); font-size:0.9rem; margin-bottom:32px; }
+
+  .stats-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:32px; }
+  @media (min-width:640px){ .stats-row{ grid-template-columns:repeat(4,1fr); } }
+  .stat-card{ border-radius:20px; padding:20px; text-align:center; }
+  .stat-num{ font-size:1.8rem; font-weight:700; }
+  .stat-label{ font-size:0.75rem; color:rgba(255,255,255,0.5); margin-top:4px; }
+
+  .panel{ border-radius:24px; padding:20px; margin-bottom:24px; }
+  .panel h2{ font-size:1.1rem; margin-bottom:16px; font-weight:600; }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.85rem; }
+  th{ text-align:left; color:rgba(255,255,255,0.4); font-weight:500; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.1); }
+  td{ padding:10px; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .tag-note{ color:#ff9d70; }
+  .tag-game{ color:#7fd0ff; }
+  .table-wrap{ overflow-x:auto; }
+
+  .loading{ text-align:center; color:rgba(255,255,255,0.35); font-size:0.85rem; padding:30px 0; }
+  .denied{ display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:24px; }
+  .denied h1{ font-size:1.5rem; margin-bottom:12px; }
+  .denied p{ color:rgba(255,255,255,0.5); }
+</style>
+</head>
+<body>
+<div id="denied-view" class="denied" style="display:none;">
+  <h1>🔒 പ്രവേശനം ഇല്ല</h1>
+  <p>ഈ പേജ് അഡ്മിന് മാത്രമുള്ളതാണ്.</p>
+</div>
+
+<div id="page-content" style="display:none;">
+  <div class="nav-wrap">
+    <nav class="nav glass pill">
+      <div class="nav-left">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
+        <span class="brand serif">അക്ഷരം അഡ്മിൻ</span>
+      </div>
+      <div class="nav-right">
+        <a href="home.html">ഹോം</a>
+        <button onclick="doLogout('index.html')">ലോഗ്ഔട്ട്</button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="wrap">
+    <h1 class="page-title">ഡാഷ്ബോർഡ്</h1>
+    <p class="page-sub">വിദ്യാർത്ഥികളുടെ പ്രവർത്തനങ്ങൾ ഇവിടെ കാണാം. ആരൊക്കെ sign up ചെയ്തു എന്ന് പൂർണ്ണമായി കാണാൻ Firebase Console → Authentication → Users ടാബ് നോക്കുക.</p>
+
+    <div class="stats-row">
+      <div class="stat-card glass">
+        <div class="stat-num" id="stat-total">—</div>
+        <div class="stat-label">ആകെ പ്രവർത്തനങ്ങൾ</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-num" id="stat-users">—</div>
+        <div class="stat-label">വ്യത്യസ്ത വിദ്യാർത്ഥികൾ</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-num" id="stat-notes">—</div>
+        <div class="stat-label">നോട്ട് ഡൗൺലോഡുകൾ</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-num" id="stat-games">—</div>
+        <div class="stat-label">ഗെയിംസ് കളിച്ചത്</div>
+      </div>
+    </div>
+
+    <div class="panel glass">
+      <h2>അടുത്തിടെയുള്ള പ്രവർത്തനങ്ങൾ</h2>
+      <div class="table-wrap">
+        <table id="activity-table">
+          <thead>
+            <tr><th>ഇമെയിൽ</th><th>തരം</th><th>ഇനം</th><th>സമയം</th></tr>
+          </thead>
+          <tbody id="activity-body">
+            <tr><td colspan="4" class="loading">ലോഡ് ചെയ്യുന്നു...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script>
+  firebase.auth().onAuthStateChanged(function(user){
+    document.documentElement.style.visibility = 'visible';
+    if (!user){
+      window.location.href = 'index.html';
+      return;
+    }
+    if (user.email !== ADMIN_EMAIL){
+      document.getElementById('denied-view').style.display = 'flex';
+      return;
+    }
+    document.getElementById('page-content').style.display = 'block';
+    loadDashboard();
+  });
+
+  function fmtTime(ts){
+    if (!ts) return '—';
+    var d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+  }
+
+  function loadDashboard(){
+    firebase.firestore().collection('activity').orderBy('timestamp', 'desc').limit(200).get()
+      .then(function(snapshot){
+        var rows = [];
+        var users = {};
+        var noteCount = 0, gameCount = 0;
+        snapshot.forEach(function(doc){
+          var d = doc.data();
+          rows.push(d);
+          users[d.email] = true;
+          if (d.type === 'note') noteCount++;
+          if (d.type === 'game') gameCount++;
+        });
+
+        document.getElementById('stat-total').textContent = rows.length;
+        document.getElementById('stat-users').textContent = Object.keys(users).length;
+        document.getElementById('stat-notes').textContent = noteCount;
+        document.getElementById('stat-games').textContent = gameCount;
+
+        var tbody = document.getElementById('activity-body');
+        if (!rows.length){
+          tbody.innerHTML = '<tr><td colspan="4" class="loading">ഇതുവരെ പ്രവർത്തനങ്ങൾ ഒന്നും ഇല്ല.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = rows.map(function(d){
+          return '<tr>' +
+            '<td>' + (d.email || '—') + '</td>' +
+            '<td class="' + (d.type === 'note' ? 'tag-note' : 'tag-game') + '">' + (d.type === 'note' ? 'കുറിപ്പ്' : 'ഗെയിം') + '</td>' +
+            '<td>' + (d.label || '—') + '</td>' +
+            '<td>' + fmtTime(d.timestamp) + '</td>' +
+          '</tr>';
+        }).join('');
+      })
+      .catch(function(err){
+        document.getElementById('activity-body').innerHTML = '<tr><td colspan="4" class="loading">പിശക്: ' + err.message + '</td></tr>';
+      });
+  }
+</script>
+</body>
+</html>
