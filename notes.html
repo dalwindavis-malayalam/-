@@ -69,8 +69,14 @@
 
   .site-footer{ position:relative; z-index:1; text-align:center; color:rgba(255,255,255,0.3); font-size:0.75rem; padding:0 24px 40px; }
 </style>
+<style>html{ visibility:hidden; }</style>
 </head>
 <body>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<script>requireAuth('index.html');</script>
 <div class="bg-glow"></div>
 
 <div class="nav-wrap">
@@ -79,10 +85,13 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
       <span class="brand serif">അക്ഷരം</span>
     </div>
-    <a href="index.html" class="back-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      ഹോമിലേക്ക്
-    </a>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <a href="home.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        ഹോമിലേക്ക്
+      </a>
+      <button onclick="doLogout('index.html')" class="back-link" style="background:none;border:none;cursor:pointer;font-family:inherit;">ലോഗ്ഔട്ട്</button>
+    </div>
   </nav>
 </div>
 
@@ -140,7 +149,7 @@
         '</div>' +
         '<div class="note-subject">' + humanize(f.name) + '</div>' +
         '<div class="note-desc">മലയാളം കുറിപ്പ്</div>' +
-        '<a class="note-download glass pill" href="' + f.download_url + '" download>' +
+        '<a class="note-download glass pill" href="' + f.download_url + '" download onclick="logActivity(\'note\', \'' + humanize(f.name).replace(/'/g, "\\'") + '\')">' +
           '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>' +
           'ഡൗൺലോഡ്' +
         '</a>';
